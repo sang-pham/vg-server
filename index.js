@@ -1,8 +1,8 @@
-const express = require('express');
-const passport = require('./passport');
+const express = require('express')
+const passport = require('./passport')
 require('dotenv').config()
 const mongoose = require('mongoose')
-const session = require('express-session')
+const authRoute = require('./routes/auth')
 
 const app = express();
 
@@ -15,32 +15,26 @@ mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${
   }
 );
 
+app.use(express.json())
+
 app.use(passport.initialize());
-app.use(session({
-  secret: process.env.SECRET_KEY,
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true }
-}));
 
 app.get(
   '/auth/google',
   passport.authenticate('google', {
-    scope: ['profile', 'email']
+    scope: ['profile', 'email'],
+    session: false
   })
 );
 
-app.get('/sample-auth', passport.authenticate('google', {
-  scope: ['profile', 'email']
-}, (req, res) => {
-  console.log(req, res)
-  res.status(200).send('Sample auth')
-}))
-
-
-app.get('/auth/google/callback', passport.authenticate('google'), (req, res) => {
-  return res.status(200).send('Login success')
+app.get('/auth/google/callback', passport.authenticate('google',  { 
+  failureRedirect: '/signup',
+  session: false 
+}), (req, res) => {
+  return res.status(200).send('Regist info success')
 });
+
+app.use('/', authRoute)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, (port) => {
