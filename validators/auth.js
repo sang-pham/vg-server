@@ -1,6 +1,6 @@
 const {checkSchema} = require("express-validator")
 
-const validateUpdateInfo = checkSchema({
+const validateRegisterInfo = checkSchema({
   email: {
     in: 'body',
     errorMessage: 'Email must be filled',
@@ -9,6 +9,13 @@ const validateUpdateInfo = checkSchema({
       options: {
         min: 1
       }
+    }
+  },
+  password: {
+    in: 'body',
+    isLength: {
+      errorMessage: 'Password should be at least 6 chars long',
+      options: { min: 6 },
     }
   },
   last_name: {
@@ -59,7 +66,28 @@ const validateUpdateInfo = checkSchema({
   }
 })
 
+const validateLoginInfo = checkSchema({
+  email: {
+    in: 'body',
+    errorMessage: 'Email must be filled',
+    trim: true,
+    isLength: {
+      options: {
+        min: 1
+      }
+    }
+  },
+  password: {
+    in: 'body',
+    isLength: {
+      errorMessage: 'Password should be at least 6 chars long',
+      options: { min: 6 },
+    }
+  }
+})
+
 module.exports = {
-  validateUpdateInfo
+  validateRegisterInfo,
+  validateLoginInfo
 }
 

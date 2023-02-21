@@ -1,5 +1,7 @@
-const userService = require('./user.service')
+const userService = require('./user')
+const userTokenService = require('./userToken')
 
 module.exports = {
-  userService
+  userService,
+  userTokenService
 }

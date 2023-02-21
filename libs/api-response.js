@@ -49,8 +49,13 @@ const asyncHandle = (handle) => {
     Promise.resolve().then(() => {
       return handle(req, res);
     }).then(result => {
+      let success = result.success != undefined ? result.success : true
+      let status = result.status || undefined
+      delete result.success
+      delete result.status
       return res.json({
-        success: true,
+        success,
+        status,
         ...result
       });
     }).catch(e => {

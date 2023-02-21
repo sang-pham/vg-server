@@ -1,0 +1,28 @@
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
+
+const authMiddleware = () => {
+  return async (req, res, next) => {
+    if (!req.headers.authorization) {
+      return res.status(400).json({
+        message: 'Token is required'
+      })
+    }
+    jwt.verify(
+      req.headers.authorization.replace('Bearer ', ''),
+      ACCESS_TOKEN_SECRET,
+      (err, result) => {
+        if (err) {
+          return res.status(401).json({
+            message: "Fail to authentication"
+          })
+        }
+        req.user = result
+        next()
+      }
+    )
+  }
+}
+
+module.exports = authMiddleware

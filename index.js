@@ -3,6 +3,7 @@ const passport = require('./passport')
 require('dotenv').config()
 const mongoose = require('mongoose')
 const authRoute = require('./routes/auth')
+const userRoute = require('./routes/user')
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.get('/auth/google/callback', passport.authenticate('google',  {
 });
 
 app.use('/', authRoute)
+app.use('/api/user', userRoute)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, (port) => {

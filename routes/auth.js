@@ -6,8 +6,19 @@ const { authValidator } = require('../validators')
 
 const {asyncHandle} = ApiResponse
 
-router.post('/update-info',
-  authValidator.validateUpdateInfo,
-  asyncHandle(authController.updateInfo))
+router.post('/register-info',
+  authValidator.validateRegisterInfo,
+  asyncHandle(authController.registInfo))
+
+router.post('/signup',
+  authValidator.validateRegisterInfo,
+  asyncHandle(authController.signup))
+
+router.post('/signin',
+  authValidator.validateLoginInfo,
+  asyncHandle(authController.login))
+
+router.post('/access-token',
+  asyncHandle(authController.getNewAccessToken))
 
 module.exports = router

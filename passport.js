@@ -9,7 +9,6 @@ passport.use(
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: '/auth/google/callback'
   }, async (accessToken, refreshToken, profile, done) => {
-    console.log(accessToken, refreshToken, profile)
     if (profile.id) {
       let email = profile.emails[0].value
       let last_name = profile.name.familyName
