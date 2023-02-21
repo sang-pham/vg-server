@@ -5,7 +5,7 @@ const adminMiddleware = () => {
         message: 'You must login firstly'
       })
     }
-    if (req.user.role != 'super_admin') {
+    if (req.user.role != 'super_admin' && req.user.role != 'admin') {
       return res.status(400).json({
         message: 'Invalid role'
       })

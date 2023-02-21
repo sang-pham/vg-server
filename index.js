@@ -1,20 +1,21 @@
 const express = require('express')
 const passport = require('./passport')
 require('dotenv').config()
-const mongoose = require('mongoose')
+require('./models/db')
+// const mongoose = require('mongoose')
 const authRoute = require('./routes/auth')
 const userRoute = require('./routes/user')
 
 const app = express();
 
-mongoose.set("strictQuery", false);
+// mongoose.set("strictQuery", false);
 
-mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?${process.env.MONGOQUERYPARAMS}`,
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  (err) => {
-    console.log(err)
-  }
-);
+// mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?${process.env.MONGOQUERYPARAMS}`,
+//   { useNewUrlParser: true, useUnifiedTopology: true },
+//   (err) => {
+//     console.log(err)
+//   }
+// );
 
 app.use(express.json())
 

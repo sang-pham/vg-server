@@ -10,11 +10,11 @@ passport.use(
     callbackURL: '/auth/google/callback'
   }, async (accessToken, refreshToken, profile, done) => {
     if (profile.id) {
-      let email = profile.emails[0].value
+      let username = profile.emails[0].value
       let last_name = profile.name.familyName
       let first_name = profile.name.givenName
-      const user = await userService.upsertUserInfo(email, {
-        email,
+      const user = await userService.upsertUserInfo(username, {
+        username,
         last_name,
         first_name
       })

@@ -4,11 +4,7 @@ const bcrypt = require('bcrypt')
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-  google_id: {
-    type: String,
-    required: false
-  },
-  email: {
+  username : {
     type: String,
     required: true,
     unique: true
@@ -16,24 +12,12 @@ const userSchema = new Schema({
   password: {
     type: String
   },
-  last_name: {
-    type: String,
-    required: true
-  },
-  first_name: {
-    type: String,
-    required: true
-  },
-  phone_number: {
-    type: String,
+  user_info: {
+    type: Object,
     required: false
   },
-  birth_day: {
-    type: Date,
-    required: false
-  },
-  address: {
-    type: String,
+  created_by: {
+    type: Object,
     required: false
   },
   created: {
@@ -44,10 +28,6 @@ const userSchema = new Schema({
     type: String,
     enum: ['super_admin', 'admin', 'user'],
     default: 'user'
-  },
-  sex: {
-    type: String,
-    enum: ['male', 'female']
   },
   verified: {
     type: Boolean,

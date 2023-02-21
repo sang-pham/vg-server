@@ -4,61 +4,67 @@ const { common, paging } = require('../utils')
 const getUsers = async (req, res) => {
   let {
     page,
-    size,
-    name,
-    first_name,
-    last_name,
-    email
+    size
   } = req.query
 
-  const pagingData = common.getLimitOffset({ limit: size, offset: page });
-  let match = {}
-  if (first_name) {
-    match['first_name'] = { "$regex": first_name, "$options": i }
-  }
-  if (last_name) {
-    match['last_name'] = { "$regex": last_name, "$options": i }
-  }
-  if (email) {
-    match['email'] = { "$regex": email, "$options": i }
-  }
-
-  let aggregationOperations = paging.pagedAggregateQuery(
-    pagingData.limit,
-    pagingData.offset,
-    [
-      { $match: match },
-      { $project: {email: 1, first_name: 1, last_name: 1, role: 1, created: 1, sex: 1, birth_day: 1, phone_number: 1}},
-      { $sort: {created: -1}}
-    ]
-  )
-  
-  let aggregationResult = await userService.aggregateFind(aggregationOperations)
-  if (!aggregationResult.length) {
+  try {
+    const pagingData = common.getLimitOffset({ limit: size, offset: page });
+    const {match, sort} = common.genericSearchQuery(req.query)
+    console.log(match, sort)
+    let aggregationOperations = paging.pagedAggregateQuery(
+      pagingData.limit,
+      pagingData.offset,
+      [
+        { $match: match },
+        { $project: {username: 1, role: 1, created: 1, user_info: 1}},
+        { $sort: Object.keys(sort).length ? sort: {created: -1}}
+      ]
+    )
+    
+    let aggregationResult = await userService.aggregateFind(aggregationOperations)
+    if (!aggregationResult.length) {
+      return {
+        meta: {
+          total: 0
+        },
+        data: []
+      }
+    }
+    aggregationResult = aggregationResult[0] || { data: [], total: 0 }
     return {
+      data: aggregationResult.data,
       meta: {
-        total: 0
-      },
-      data: []
+        total: aggregationResult.total
+      }
     }
-  }
-  aggregationResult = aggregationResult[0] || { data: [], total: 0 }
-  return {
-    data: aggregationResult.data,
-    meta: {
-      total: aggregationResult.total
-    }
+  } catch (error) {
+    console.log(error)
   }
 }
 
 const createUser = async (req, res) => {
-  const {email} = req.body
-  let user = await userService.findByEmail(email)
+  const {username} = req.body
+  let user = await userService.findByUsername(username)
   if (user) {
-    throw new Error(`User with email ${email} has been used`)
+    throw new Error(`Username ${username} has been used`)
+  }
+  let { role } = req.body
+  let requestRole = req.user.role
+  if (role == 'admin' && requestRole != 'super_admin') {
+    return {
+      success: false,
+      message: 'You don\'t have permission to create this user type.'
+    }
   }
   try {
-    await userService.createUser(req.body)
+    await userService.createUser({
+      ...req.body,
+      created_by: {
+        role: req.user.role,
+        username: req.user.username,
+        user_id: req.user.user_id
+      }
+    })
     return {
       success: true,
       message: 'Create new user succesfully'
@@ -74,6 +80,15 @@ const createUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   const {user_id, hard_delete} = req.query
+  const user = await userService.findById(user_id)
+  if (user) {
+    if (user.role == 'admin' && req.user.role != 'super_admin') {
+      return {
+        success: false,
+        message: 'You don\'t have permission to delete this user type.'
+      }
+    }
+  }
   const result = await userService.deleteUser(user_id, hard_delete)
   if (result) {
     return {

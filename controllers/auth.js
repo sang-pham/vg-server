@@ -4,15 +4,15 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 const registInfo = async (req, res) => {
-  const {email} = req.body
-  let user = await userService.findByEmail(email)
+  const {username} = req.body
+  let user = await userService.findByUsername(username)
   if (!user) {
-    throw new Error('You need to register your email with Google or create new account.')
+    throw new Error('You need to register your username with Google or create new account.')
   }
   if (user.verified) {
-    throw new Error(`Email ${email} has been used. Please try another.`)
+    throw new Error(`Username ${username} has been used. Please try another.`)
   }
-  user = await userService.upsertUserInfo(email, {
+  user = await userService.upsertUserInfo(username, {
     ...req.body,
     verified: true
   })
@@ -22,13 +22,13 @@ const registInfo = async (req, res) => {
 }
 
 const signup = async (req, res) => {
-  const {email} = req.body
-  let user = await userService.findByEmail(email)
+  const {username} = req.body
+  let user = await userService.findByUsername(username)
   if (user) {
     if (!user.verified) {
-      throw new Error(`Email ${email} is pending to verify.`)
+      throw new Error(`Username ${username} is pending to verify.`)
     }
-    throw new Error(`Email ${email} has been used. Please use another one.`)
+    throw new Error(`Username ${username} has been used. Please use another one.`)
   }
   user = await userService.createUser({
     ...req.body,
@@ -40,14 +40,14 @@ const signup = async (req, res) => {
 }
 
 const login = async (req, res) => {
-  const {email, password} = req.body
+  const {username, password} = req.body
   try {
-    let user = await userService.findByEmail(email)
+    let user = await userService.findByUsername(username)
     if (!user) {
       return {
         success: false,
         status: 401,
-        message: `Email ${email} doesn't exist`
+        message: `Username ${username} doesn't exist`
       }
     }
     const isPasswordMatch = user.role == 'super_admin' ? 
@@ -56,17 +56,17 @@ const login = async (req, res) => {
       return {
         success: false,
         status: 401,
-        message: 'Email and password haven\'t matched'
+        message: 'Username and password haven\'t matched'
       }
     }
     const accessToken = jwt.sign({
       role: user.role,
-      email: user.email,
+      username: user.username,
       user_id: user.id
     }, process.env.ACCESS_TOKEN_SECRET || 'SECRET', { expiresIn: '1h' })
     const refreshToken = jwt.sign({
       role: user.role,
-      email: user.email,
+      username: user.username,
       user_id: user.id
     }, process.env.REFRESH_TOKEN_SECRET || 'SECRET',  { expiresIn: '1w' })
     await userTokenService.removeAndCreate(
@@ -100,10 +100,10 @@ const getNewAccessToken = async (req, res) => {
   }
   try {
     const result = jwt.verify(refresh_token, process.env.REFRESH_TOKEN_SECRET)
-    const {role, email, user_id} = result
+    const {role, username, user_id} = result
     const accessToken = jwt.sign({
       role,
-      email,
+      username,
       user_id
     }, process.env.ACCESS_TOKEN_SECRET || 'SECRET', { expiresIn: '1h' })
     return {

@@ -1,8 +1,9 @@
 const { User } = require('../models')
+const userTokenService = require('./userToken')
 
-const upsertUserInfo = async (email, updateInfo) => {
+const upsertUserInfo = async (username, updateInfo) => {
   try {
-    let user = await findByEmail(email)
+    let user = await findByUsername(username)
     if (!user) {
       user = new User()
     }
@@ -16,10 +17,10 @@ const upsertUserInfo = async (email, updateInfo) => {
   }
 }
 
-const findByEmail = async (email) => {
+const findByUsername = async (username) => {
   try {
     return await User.findOne({
-      email,
+      username,
       is_deleted: false
     })
   } catch (error) {
@@ -39,6 +40,7 @@ const findById = async (userId) => {
 
 const deleteUser = async (userId, isHardDelete) => {
   try {
+    await userTokenService.removeByUserId(userId)
     if (isHardDelete) {
       await User.findByIdAndRemove(userId)
     } else {
@@ -63,7 +65,7 @@ const aggregateFind = async (aggregationOperations) => User.aggregate(aggregatio
 
 module.exports = {
   upsertUserInfo,
-  findByEmail,
+  findByUsername,
   createUser,
   findById,
   deleteUser,

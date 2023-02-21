@@ -15,9 +15,18 @@ const removeAndCreate = async (userId, token) => {
   } catch (error) {
     console.log(error)
   }
+}
 
+const removeByUserId = async (userId) => {
+  try {
+    let userToken = await UserToken.findOne({user_id: userId})
+    if (userToken) await userToken.remove()
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 module.exports = {
-  removeAndCreate
+  removeAndCreate,
+  removeByUserId
 }
