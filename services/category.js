@@ -6,16 +6,18 @@ const findByName = async (categoryName) => {
   })
 }
 
-const createCategory = async ({category_name, category_type, parent_cateogry_name}) => {
+const createCategory = async ({category_name, category_type, parent_category_name}) => {
   let existedCategory = await findByName(category_name)
   let parentCategoryId = null
   if (existedCategory) {
     throw new Error(`Category with name '${category_name}' has existed`)
   }
-  if (parent_cateogry_name) {
-    let parentCategory = await findByName(parent_cateogry_name)
+  if (parent_category_name) {
+    console.log(parent_category_name)
+    let parentCategory = await findByName(parent_category_name)
+    console.log(parentCategory)
     if (!parentCategory) {
-      throw new Error(`Parent category with name '${parent_cateogry_name}' doesn't exist`)
+      throw new Error(`Parent category with name '${parent_category_name}' doesn't exist`)
     } else {
       parentCategoryId = parentCategory._id
     }

@@ -30,6 +30,21 @@ const genericSearchQuery = (requestQuery = {}) => {
   let matchObj = {}, sortObj = {}
   
   for (const key in queryFields) {
+    if (['true', 'false'].indexOf(queryFields[key]) >= 0) {
+      matchObj[key] = queryFields[key] == 'true' ? true : false
+      continue
+    }
+    if (queryFields[key] && !isNaN(queryFields[key])) {
+      let isIgnoreNumberCast = constant.IGNORE_CAST_TO_NUMBER.some(item => {
+        return key.toLowerCase().includes(item)
+      })
+      if (isIgnoreNumberCast) { 
+        matchObj[key] = queryFields[key]
+      } else {
+        matchObj[key] = Number(queryFields[key])
+      }
+      continue
+    }
     matchObj[key] = queryFields[key]
   }
   if (sort) {

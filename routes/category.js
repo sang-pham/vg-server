@@ -3,7 +3,7 @@ const router = new epxress.Router()
 const {ApiResponse} = require('../libs')
 const { categoryController } = require('../controllers')
 const { superAdminMiddleware, authMiddleware } = require('../middlewares')
-const { categoryValidator } = require('../validators')
+const { categoryValidator, commonValidator } = require('../validators')
 
 const {asyncHandle} = ApiResponse
 
@@ -16,5 +16,8 @@ router.post('',
 
 router.get('',
   asyncHandle(categoryController.getCategories))
+
+router.delete(':id',
+  commonValidator.validateObjectId)
 
 module.exports = router

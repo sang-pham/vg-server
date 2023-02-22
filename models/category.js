@@ -14,9 +14,22 @@ const categorySchema = new Schema({
   parent_category_id: {
     type: mongoose.Types.ObjectId,
     default: null
+  },
+  created: {
+    type: Date,
+    default: new Date()
+  },
+  updated: {
+    type: Date,
+    default: new Date()
   }
 })
 const Category = mongoose.model('categories', categorySchema)
+
+categorySchema.pre('save', function (next) {
+  this.update = new Date()
+  return next()
+})
 
 categorySchema.pre(['remove', 'deleteOne'], async function(next) {
   try {
