@@ -24,6 +24,10 @@ const userSchema = new Schema({
     type: Date,
     default: new Date()
   },
+  updated: {
+    type: Date,
+    default: new Date()
+  },
   role: {
     type: String,
     enum: ['super_admin', 'admin', 'user'],
@@ -44,6 +48,7 @@ userSchema.pre('save', async function(next) {
     if (this.password) {
       const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
       this.password = await bcrypt.hash(this.password, salt);
+      this.updated = new Date()
     }
     return next();
   } catch (err) {

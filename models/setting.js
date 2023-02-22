@@ -16,7 +16,11 @@ const settingSchema = new Schema({
   },
   description: {
     type: String
-  }
+  },
+  created: {
+    type: Date,
+    default: new Date()
+  },
 })
 
 const Setting = mongoose.model('settings', settingSchema)

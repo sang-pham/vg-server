@@ -6,6 +6,7 @@ require('./models/db')
 const authRoute = require('./routes/auth')
 const userRoute = require('./routes/user')
 const settingRoute = require('./routes/setting')
+const categoryRoute = require('./routes/category')
 const cors = require('cors')
 
 const app = express();
@@ -43,6 +44,7 @@ app.get('/auth/google/callback', passport.authenticate('google',  {
 app.use('/', authRoute)
 app.use('/api/user', userRoute)
 app.use('/api/setting', settingRoute)
+app.use('/api/category', categoryRoute)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, (port) => {

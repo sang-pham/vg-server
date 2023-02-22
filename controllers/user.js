@@ -1,5 +1,5 @@
 const {userService} = require('../services')
-const { common, paging } = require('../utils')
+const { common, paging, constant } = require('../utils')
 
 const getUsers = async (req, res) => {
   let {
@@ -102,8 +102,34 @@ const deleteUser = async (req, res) => {
   }
 }
 
+const resetPassword = async (req, res) => {
+  let {id} = req.params
+  let user = await userService.findById(id)
+  if (!user) {
+    return {
+      success: false,
+      message: "User doesn't exist"
+    }
+  }
+  let userRole = user.role
+  let reqUser = req.user
+  if (userRole == 'admin' && reqUser.role != 'super_admin') {
+    return {
+      success: false,
+      message: "You don't have permission"
+    }
+  }
+  user.password = constant.DEFAULT_USER_PASSWORD
+  await user.save()
+  return {
+    success: true,
+    message: "Reset password successfully"
+  }
+}
+
 module.exports = {
   createUser,
   deleteUser,
-  getUsers
+  getUsers,
+  resetPassword
 }
