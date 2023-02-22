@@ -29,7 +29,7 @@ const deleteByKey = async (key) => {
   if (!setting) {
     throw new Error(`Setting ${key} doesn't exist`)
   }
-  let path = setting.path
+  let path = './public/' + setting.path
   await setting.remove()
   let isExisted = fs.existsSync(path)
   if (isExisted) {
@@ -38,8 +38,11 @@ const deleteByKey = async (key) => {
   return true
 }
 
+const aggregateFind = async (aggregationOperations) => Setting.aggregate(aggregationOperations)
+
 module.exports = {
   findByKey,
   upsertSetting,
-  deleteByKey
+  deleteByKey,
+  aggregateFind
 }

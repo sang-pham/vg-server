@@ -1,6 +1,7 @@
 const {settingService} = require('../services')
 const formidable = require('formidable')
 const fs = require('fs')
+const { common, paging } = require('../utils')
 
 const getSettings = async (req, res) => {
   let {
@@ -17,12 +18,12 @@ const getSettings = async (req, res) => {
       pagingData.offset,
       [
         { $match: match },
-        { $project: {key: 1, path: 1, file_type: 1, description: 1}},
+        { $project: {key: 1, path: 1, file_type: 1, description: 1, created: -1, updated: -1}},
         { $sort: Object.keys(sort).length ? sort: {created: -1}}
       ]
     )
     
-    let aggregationResult = await userService.aggregateFind(aggregationOperations)
+    let aggregationResult = await settingService.aggregateFind(aggregationOperations)
     if (!aggregationResult.length) {
       return {
         meta: {
@@ -68,8 +69,8 @@ const upsertSetting = async (req, res) => {
           }
         }
         let fileType = files.file.originalFilename.split('.')[files.file.originalFilename.split('.').length - 1]
-        const filePath = `./public/settings/${key}.${fileType}`
-        let writeStream = fs.createWriteStream(filePath)
+        const filePath = `settings/${key}.${fileType}`
+        let writeStream = fs.createWriteStream('./public/' + filePath)
         fs.createReadStream(files.file.filepath)
           .pipe(writeStream)
           .on('finish', async () => {

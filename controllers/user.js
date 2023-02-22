@@ -16,7 +16,7 @@ const getUsers = async (req, res) => {
       pagingData.offset,
       [
         { $match: match },
-        { $project: {username: 1, role: 1, created: 1, user_info: 1, is_deleted: 1}},
+        { $project: {username: 1, role: 1, created: 1, user_info: 1, is_deleted: 1, updated: 1}},
         { $sort: Object.keys(sort).length ? sort: {created: -1}}
       ]
     )
