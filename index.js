@@ -5,6 +5,7 @@ require('./models/db')
 // const mongoose = require('mongoose')
 const authRoute = require('./routes/auth')
 const userRoute = require('./routes/user')
+const settingRoute = require('./routes/setting')
 
 const app = express();
 
@@ -18,6 +19,7 @@ const app = express();
 // );
 
 app.use(express.json())
+app.use(express.static('public'))
 
 app.use(passport.initialize());
 
@@ -38,6 +40,7 @@ app.get('/auth/google/callback', passport.authenticate('google',  {
 
 app.use('/', authRoute)
 app.use('/api/user', userRoute)
+app.use('/api/setting', settingRoute)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, (port) => {

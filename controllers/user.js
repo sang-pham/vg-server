@@ -60,7 +60,6 @@ const createUser = async (req, res) => {
     await userService.createUser({
       ...req.body,
       created_by: {
-        role: req.user.role,
         username: req.user.username,
         user_id: req.user.user_id
       }

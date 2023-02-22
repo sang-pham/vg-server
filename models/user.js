@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 const SALT_WORK_FACTOR = 10;
 const bcrypt = require('bcrypt')
-const { Schema } = mongoose;
+const { Schema } = mongoose
 
 const userSchema = new Schema({
   username : {
