@@ -6,6 +6,7 @@ require('./models/db')
 const authRoute = require('./routes/auth')
 const userRoute = require('./routes/user')
 const settingRoute = require('./routes/setting')
+const cors = require('cors')
 
 const app = express();
 
