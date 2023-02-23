@@ -95,8 +95,32 @@ const deleteByKey = async (req, res) => {
   }
 }
 
+const updateByKey = async (req, res) => {
+  try {
+    let {key} = req.params
+    let form = req.body
+    if (!key) {
+      return {
+        success: false,
+        message: 'updateByKey param must be specified'
+      }
+    }
+    settingService.updateByKey(key,form)
+    return {
+      success: true,
+      message: `updateByKey setting ${key} successfully`
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message || 'Something is wrong'
+    }
+  }
+}
+
 module.exports = {
   upsertSetting,
   deleteByKey,
-  getSettings
+  getSettings,
+  updateByKey
 }

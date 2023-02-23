@@ -7,11 +7,11 @@ const settingSchema = new Schema({
     required: true,
     unique: true
   },
-  path: {
+  value: {
     type: String,
     required: true
   },
-  file_type: {
+  type: {
     type: String
   },
   description: {

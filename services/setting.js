@@ -38,11 +38,23 @@ const deleteByKey = async (key) => {
   return true
 }
 
+const updateByKey = async (key, form) => {
+  let setting = await findByKey(key)
+  if (!setting) {
+    throw new Error(`Setting ${key} doesn't exist`)
+  }
+  setting.value = form.value;
+  setting.updated = new Date(); 
+  await setting.save() 
+  return true
+}
+
 const aggregateFind = async (aggregationOperations) => Setting.aggregate(aggregationOperations)
 
 module.exports = {
   findByKey,
   upsertSetting,
   deleteByKey,
-  aggregateFind
+  aggregateFind,
+  updateByKey
 }

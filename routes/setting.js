@@ -8,10 +8,13 @@ const {asyncHandle} = ApiResponse
 router.use(authMiddleware(), superAdminMiddleware())
 
 router.get('',
-  asyncHandle(settingController.getSettings))
+asyncHandle(settingController.getSettings))
 
 router.post('',
-  asyncHandle(settingController.upsertSetting))
+asyncHandle(settingController.upsertSetting))
+
+router.put('/:key',
+asyncHandle(settingController.updateByKey))
 
 router.delete('/:key',
   asyncHandle(settingController.deleteByKey))
