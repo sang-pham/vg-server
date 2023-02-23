@@ -19,7 +19,10 @@ const createCategory = async (req, res) => {
 
 const getParent = async (req, res) => {
   try {
-    return await categoryService.parentCategoriesFind()
+    let data =  await categoryService.parentCategoriesFind()
+    return {
+      data:data
+    }
   } catch (error) {
     logger.error(error);
   }
