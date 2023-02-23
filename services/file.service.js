@@ -9,6 +9,7 @@ const logger = require("../utils/logger");
 
 const uploadFile = async (file) => {
   try {
+    logger.info(`FIle: ${file}`)
     const filePath = "./" + file.path;
     const fileStream = fs.createReadStream(filePath);
     let formData = new FormData();
