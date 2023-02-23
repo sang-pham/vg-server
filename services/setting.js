@@ -1,6 +1,8 @@
 const { Setting } = require('../models')
 const fs = require('fs')
 
+const logger = require('../utils/logger')
+
 const findByKey = async (key) => {
   return Setting.findOne({
     key: key
@@ -39,11 +41,13 @@ const deleteByKey = async (key) => {
 }
 
 const updateByKey = async (key, form) => {
-  let setting = await findByKey(key)
+  let setting = await findByKey(key) 
   if (!setting) {
+    logger.error(`Setting with key ${key} not found`)
     throw new Error(`Setting ${key} doesn't exist`)
   }
   setting.value = form.value;
+  setting.file_type = form.file_type;
   setting.updated = new Date(); 
   await setting.save() 
   return true
