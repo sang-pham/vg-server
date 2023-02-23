@@ -32,7 +32,7 @@ const getCategories = async (req, res) => {
   try {
     return await baseService.baseFind(
       req.query,
-      { category_type: 1, category_name: 1, created: 1, parent_category_id: 1, updated: 1 },
+      { category_code: 1, category_name: 1, created: 1, parent_category_id: 1, parent_category_code: 1, updated: 1 },
       categoryService.aggregateFind,
     );
   } catch (error) {

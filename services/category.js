@@ -6,22 +6,29 @@ const findByName = async (categoryName) => {
   });
 };
 
-const createCategory = async ({ category_name, category_type, parent_category_name }) => {
+const findByCode = async (categoryCode) => {
+  return await Category.findOne({
+    category_code: categoryCode,
+  });
+};
+
+const createCategory = async ({ category_name, category_code, parent_category_code }) => {
   let existedCategory = await findByName(category_name);
   let parentCategoryId = null;
   if (existedCategory) {
     throw new Error(`Category with name '${category_name}' has existed`);
   }
-  if (parent_category_name) {
-    let parentCategory = await findByName(parent_category_name);
+  if (parent_category_code) {
+    let parentCategory = await findByCode(parent_category_code);
     if (parentCategory) {
       parentCategoryId = parentCategory._id;
     }
   }
   await Category.create({
-    category_type,
+    category_code,
     category_name,
     parent_category_id: parentCategoryId,
+    parent_category_code: parent_category_code,
   });
 };
 

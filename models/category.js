@@ -2,9 +2,8 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const categorySchema = new Schema({
-  category_type: {
-    type: String,
-    required: true
+  category_code: {
+    type: String
   },
   category_name: {
     type: String,
@@ -14,6 +13,9 @@ const categorySchema = new Schema({
   parent_category_id: {
     type: mongoose.Types.ObjectId,
     default: null
+  },
+  parent_category_code: {
+    type: String,
   },
   created: {
     type: Date,
