@@ -31,11 +31,11 @@ const uploadFile = async (file) => {
         return newFile._doc;
       })
       .catch((error) => {
-        logger.error(error);
+        logger.error(`File service_uploadFile(): ${error}`);
       });
     return result;
   } catch (error) {
-    logger.error(error);
+    logger.error(`File service_uploadFile(): ${error}`);
   }
 };
 
