@@ -3,6 +3,7 @@ const userTokenService = require('./userToken')
 const settingService = require('./setting')
 const categoryService = require('./category')
 const fileService = require('./file.service')
+const productService = require('./product')
 const baseService = require('./base')
 
 module.exports = {
@@ -11,5 +12,6 @@ module.exports = {
   settingService,
   categoryService,
   fileService,
+  productService,
   baseService
 }

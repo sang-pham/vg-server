@@ -12,6 +12,10 @@ const findByCode = async (categoryCode) => {
   });
 };
 
+const findOne = async (findObj) => {
+  return Category.findOne(findObj)
+}
+
 const createCategory = async ({ category_name, category_code, parent_category_code }) => {
   let existedCategory = await findByName(category_name);
   let parentCategoryId = null;
@@ -83,4 +87,5 @@ module.exports = {
   deleteCategoryById,
   aggregateFind,
   parentCategoriesFind,
+  findOne
 };
