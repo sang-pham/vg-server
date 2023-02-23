@@ -9,7 +9,8 @@ const logger = require("../utils/logger");
 
 const uploadFile = async (file) => {
   try {
-    const filePath = "./" + file.path;
+    logger.info(`FIle: ${file}`);
+    const filePath = file.path;
     const fileStream = fs.createReadStream(filePath);
     let formData = new FormData();
     formData.append(`file`, fileStream);
@@ -30,11 +31,11 @@ const uploadFile = async (file) => {
         return newFile._doc;
       })
       .catch((error) => {
-        logger.error(error);
+        logger.error(`File service_uploadFile(): ${error}`);
       });
     return result;
   } catch (error) {
-    logger.error(error);
+    logger.error(`File service_uploadFile(): ${error}`);
   }
 };
 
