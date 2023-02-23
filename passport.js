@@ -18,23 +18,9 @@ passport.use(
         last_name,
         first_name
       })
-      console.log(user)
       done(null, user)
     }
   })
 );
-
-// passport.serializeUser((user, done) => {
-//   console.log(user)
-//   done(null, user.id);
-// });
-
-// passport.deserializeUser((id, done) => {
-//   console.log(id)
-//   User.findById(id)
-//     .then(user => {
-//       done(null, user);
-//     })
-// });
 
 module.exports = passport

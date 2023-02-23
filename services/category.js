@@ -13,9 +13,7 @@ const createCategory = async ({category_name, category_type, parent_category_nam
     throw new Error(`Category with name '${category_name}' has existed`)
   }
   if (parent_category_name) {
-    console.log(parent_category_name)
     let parentCategory = await findByName(parent_category_name)
-    console.log(parentCategory)
     if (!parentCategory) {
       throw new Error(`Parent category with name '${parent_category_name}' doesn't exist`)
     } else {
@@ -33,14 +31,38 @@ const getCategories = async () => {
 
 }
 
-const deleteChildCategories = async (categoryId) => {
+const getChildrenIds = async (id) => {
+  if (!ObjectId.isValid(id)) {
+    return
+  }
+  let arr = await Category.find({
+    parent_category_id: id
+  }).select({_id: 1})
+  return arr.map(item => item._id)
+} 
+
+const deleteCategoryById = async (categoryId) => {
   try {
     if (!ObjectId.isValid(categoryId)) {
       return
     }
-    await Category.deleteMany({
+    const childrenIds = await getChildrenIds(categoryId)
+    //delete root
+    await Category.findOneAndDelete({
       _id: new ObjectId(categoryId)
     })
+    while (childrenIds && childrenIds.length) {
+      let tempArr = [...childrenIds]
+      childrenIds.length = 0
+      for (const childId of tempArr) {
+        childrenIds.push(...await getChildrenIds(childId))
+      }
+      await Category.deleteMany({
+        _id: {
+          $in: tempArr
+        }
+      })
+    }
     return true
   } catch (error) {
     console.log(error)
@@ -48,8 +70,11 @@ const deleteChildCategories = async (categoryId) => {
   }
 }
 
+const aggregateFind = async (aggregationOperations) => Category.aggregate(aggregationOperations)
+
 module.exports = {
   createCategory,
   getCategories,
-  deleteChildCategories
+  deleteCategoryById,
+  aggregateFind
 }

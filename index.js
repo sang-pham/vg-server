@@ -13,22 +13,11 @@ const logger = require('./utils/logger')
 
 const app = express();
 
-// mongoose.set("strictQuery", false);
-
-// mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?${process.env.MONGOQUERYPARAMS}`,
-//   { useNewUrlParser: true, useUnifiedTopology: true },
-//   (err) => {
-//     console.log(err)
-//   }
-// );
-
 app.use(express.json())
 app.use(express.static('public'))
 app.use(cors())
 
 app.use(passport.initialize());
-
-console.log()
 
 app.get(
   '/auth/google',

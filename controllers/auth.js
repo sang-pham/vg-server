@@ -81,7 +81,6 @@ const login = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error)
     return {
       message: 'Something is wrong',
       status: 500

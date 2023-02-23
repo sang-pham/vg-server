@@ -1,44 +1,15 @@
-const {userService} = require('../services')
-const { common, paging, constant } = require('../utils')
+const {userService, baseService} = require('../services')
+const { constant, logger } = require('../utils')
 
 const getUsers = async (req, res) => {
-  let {
-    page,
-    size
-  } = req.query
-
   try {
-    const pagingData = common.getLimitOffset({ limit: size, offset: page });
-    const {match, sort} = common.genericSearchQuery(req.query)
-    console.log(match, sort)
-    let aggregationOperations = paging.pagedAggregateQuery(
-      pagingData.limit,
-      pagingData.offset,
-      [
-        { $match: match },
-        { $project: {username: 1, role: 1, created: 1, user_info: 1, is_deleted: 1, updated: 1}},
-        { $sort: Object.keys(sort).length ? sort: {created: -1}}
-      ]
+    return await baseService.baseFind(
+      req.query,
+      {username: 1, role: 1, created: 1, user_info: 1, is_deleted: 1, updated: 1},
+      userService.aggregateFind
     )
-    
-    let aggregationResult = await userService.aggregateFind(aggregationOperations)
-    if (!aggregationResult.length) {
-      return {
-        meta: {
-          total: 0
-        },
-        data: []
-      }
-    }
-    aggregationResult = aggregationResult[0] || { data: [], total: 0 }
-    return {
-      data: aggregationResult.data,
-      meta: {
-        total: aggregationResult.total
-      }
-    }
   } catch (error) {
-    console.log(error)
+    logger.error(error)
   }
 }
 
@@ -69,7 +40,7 @@ const createUser = async (req, res) => {
       message: 'Create new user succesfully'
     }
   } catch (error) {
-    console.log(error)
+    logger.error(error)
     return {
       success: false,
       message: error.message || 'Something is wrong'

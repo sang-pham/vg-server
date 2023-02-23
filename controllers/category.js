@@ -1,4 +1,5 @@
-const { categoryService } = require('../services')
+const { categoryService, baseService } = require('../services')
+const {logger} = require('../utils')
 
 const createCategory = async (req, res) => {
   try {
@@ -8,7 +9,7 @@ const createCategory = async (req, res) => {
       message: 'Create new category successfully'
     }
   } catch (error) {
-    console.log(error)
+    logger.error(error)
     return {
       success: false,
       message: error.message || 'Something is wrong'
@@ -17,10 +18,38 @@ const createCategory = async (req, res) => {
 }
 
 const getCategories = async (req, res) => {
+  try {
+    return await baseService.baseFind(
+      req.query,
+      {category_type: 1, category_name: 1, created: 1, parent_category_id: 1, updated: 1},
+      categoryService.aggregateFind
+    )
+  } catch (error) {
+    logger.error(error)
+  }
+}
 
+const deleteCategory = async (req, res) => {
+  const {id} = req.params
+  try {
+    let res = await categoryService.deleteCategoryById(id)
+    if (res) {
+      return {
+        success: true,
+        message: 'Delete category successfully'
+      }
+    }
+  } catch (error) {
+    logger.error(error)
+    return {
+      success: false,
+      message: error.message || 'Something is wrong'
+    }
+  }
 }
 
 module.exports = {
   createCategory,
-  getCategories
+  getCategories,
+  deleteCategory
 }

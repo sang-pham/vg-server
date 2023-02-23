@@ -1,46 +1,17 @@
-const {settingService} = require('../services')
+const {settingService, baseService} = require('../services')
 const formidable = require('formidable')
 const fs = require('fs')
-const { common, paging } = require('../utils')
+const { logger } = require('../utils')
 
 const getSettings = async (req, res) => {
-  let {
-    page,
-    size
-  } = req.query
-
   try {
-    const pagingData = common.getLimitOffset({ limit: size, offset: page });
-    const {match, sort} = common.genericSearchQuery(req.query)
-    console.log(match, sort)
-    let aggregationOperations = paging.pagedAggregateQuery(
-      pagingData.limit,
-      pagingData.offset,
-      [
-        { $match: match },
-        { $project: {key: 1, path: 1, file_type: 1, description: 1, created: -1, updated: -1}},
-        { $sort: Object.keys(sort).length ? sort: {created: -1}}
-      ]
+    return await baseService.baseFind(
+      req.query,
+      {key: 1, path: 1, file_type: 1, description: 1, created: -1, updated: -1},
+      settingService.aggregateFind
     )
-    
-    let aggregationResult = await settingService.aggregateFind(aggregationOperations)
-    if (!aggregationResult.length) {
-      return {
-        meta: {
-          total: 0
-        },
-        data: []
-      }
-    }
-    aggregationResult = aggregationResult[0] || { data: [], total: 0 }
-    return {
-      data: aggregationResult.data,
-      meta: {
-        total: aggregationResult.total
-      }
-    }
   } catch (error) {
-    console.log(error)
+    logger.error(error)
   }
 }
 
@@ -94,7 +65,7 @@ const upsertSetting = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error)
+    logger.error(error)
     return {
       success: false,
       message: error.message || 'Something is wrong'
