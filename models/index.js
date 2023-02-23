@@ -3,6 +3,7 @@ const User = require('./user')
 const UserToken = require('./user_token')
 const Setting = require('./setting')
 const Category = require('./category')
+const File = require('./file')
 const mongoDb = require('./db')
 const ObjectId = mongoose.Types.ObjectId
 
@@ -13,5 +14,6 @@ module.exports = {
   Setting,
   ObjectId,
   Category,
+  File,
   mongoDb
 }

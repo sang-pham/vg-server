@@ -7,7 +7,9 @@ const authRoute = require('./routes/auth')
 const userRoute = require('./routes/user')
 const settingRoute = require('./routes/setting')
 const categoryRoute = require('./routes/category')
+const fileRoute = require('./routes/file')
 const cors = require('cors')
+const logger = require('./utils/logger')
 
 const app = express();
 
@@ -25,6 +27,8 @@ app.use(express.static('public'))
 app.use(cors())
 
 app.use(passport.initialize());
+
+console.log()
 
 app.get(
   '/auth/google',
@@ -45,8 +49,9 @@ app.use('/', authRoute)
 app.use('/api/user', userRoute)
 app.use('/api/setting', settingRoute)
 app.use('/api/category', categoryRoute)
+app.use('/api/file', fileRoute)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, (port) => {
-  console.log(`Server is listening on port ${PORT}`)
+  logger.info(`Server is listening on port ${PORT}`)
 });
