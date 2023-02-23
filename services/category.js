@@ -16,7 +16,11 @@ const createCategory = async ({ category_name, category_code, parent_category_co
   let existedCategory = await findByName(category_name);
   let parentCategoryId = null;
   if (existedCategory) {
-    throw new Error(`Category with name '${category_name}' has existed`);
+    throw new Error(`Tên danh mục '${category_name}' đã tồn tại`);
+  }
+  existedCategory = await findByCode(category_code);
+  if (existedCategory) {
+    throw new Error(`Mã danh mục: '${category_code}' đã tồn tại`);
   }
   if (parent_category_code) {
     let parentCategory = await findByCode(parent_category_code);
