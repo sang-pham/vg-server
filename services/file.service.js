@@ -9,7 +9,7 @@ const logger = require("../utils/logger");
 
 const uploadFile = async (file) => {
   try {
-    const filePath = "./" + file.path;
+    const filePath = "/home/linkdv/uploads/" + file.path;
     const fileStream = fs.createReadStream(filePath);
     let formData = new FormData();
     formData.append(`file`, fileStream);
