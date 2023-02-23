@@ -24,6 +24,9 @@ const categorySchema = new Schema({
   updated: {
     type: Date,
     default: new Date()
+  },
+  is_deleted: {
+    type: String,
   }
 })
 const Category = mongoose.model('categories', categorySchema)

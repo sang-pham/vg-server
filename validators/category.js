@@ -3,7 +3,7 @@ const {checkSchema} = require("express-validator")
 const validateCreateCategory = checkSchema({ 
   category_name: {
     in: 'body',
-    errorMessage: 'Category name must be filled',
+    errorMessage: 'Tên danh mục không được để trống',
     trim: true,
     isLength: {
       options: {
