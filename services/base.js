@@ -21,7 +21,6 @@ function getOperationFromKey(value) {
     }
     let result = {}
     result[op] = argument;
-    console.log(`result`,result)
     return result
   }
   return value;
