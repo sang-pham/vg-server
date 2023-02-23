@@ -9,6 +9,9 @@ const {asyncHandle} = ApiResponse
 
 router.use(authMiddleware(), superAdminMiddleware())
 
+router.get('/parent',
+  asyncHandle(categoryController.getParent))
+
 router.post('',
   categoryValidator.validateCreateCategory,
   asyncHandle(categoryController.createCategory)

@@ -1,80 +1,79 @@
-const { Category, ObjectId } = require('../models')
+const { Category, ObjectId } = require("../models");
 
 const findByName = async (categoryName) => {
   return await Category.findOne({
-    category_name: categoryName
-  })
-}
+    category_name: categoryName,
+  });
+};
 
-const createCategory = async ({category_name, category_type, parent_category_name}) => {
-  let existedCategory = await findByName(category_name)
-  let parentCategoryId = null
+const createCategory = async ({ category_name, category_type, parent_category_name }) => {
+  let existedCategory = await findByName(category_name);
+  let parentCategoryId = null;
   if (existedCategory) {
-    throw new Error(`Category with name '${category_name}' has existed`)
+    throw new Error(`Category with name '${category_name}' has existed`);
   }
   if (parent_category_name) {
-    let parentCategory = await findByName(parent_category_name)
-    if (!parentCategory) {
-      throw new Error(`Parent category with name '${parent_category_name}' doesn't exist`)
-    } else {
-      parentCategoryId = parentCategory._id
+    let parentCategory = await findByName(parent_category_name);
+    if (parentCategory) {
+      parentCategoryId = parentCategory._id;
     }
   }
   await Category.create({
     category_type,
     category_name,
-    parent_category_id: parentCategoryId
-  })
-}
+    parent_category_id: parentCategoryId,
+  });
+};
 
-const getCategories = async () => {
-
-}
+const getCategories = async () => {};
 
 const getChildrenIds = async (id) => {
   if (!ObjectId.isValid(id)) {
-    return
+    return;
   }
   let arr = await Category.find({
-    parent_category_id: id
-  }).select({_id: 1})
-  return arr.map(item => item._id)
-} 
+    parent_category_id: id,
+  }).select({ _id: 1 });
+  return arr.map((item) => item._id);
+};
 
 const deleteCategoryById = async (categoryId) => {
   try {
     if (!ObjectId.isValid(categoryId)) {
-      return
+      return;
     }
-    const childrenIds = await getChildrenIds(categoryId)
+    const childrenIds = await getChildrenIds(categoryId);
     //delete root
     await Category.findOneAndDelete({
-      _id: new ObjectId(categoryId)
-    })
+      _id: new ObjectId(categoryId),
+    });
     while (childrenIds && childrenIds.length) {
-      let tempArr = [...childrenIds]
-      childrenIds.length = 0
+      let tempArr = [...childrenIds];
+      childrenIds.length = 0;
       for (const childId of tempArr) {
-        childrenIds.push(...await getChildrenIds(childId))
+        childrenIds.push(...(await getChildrenIds(childId)));
       }
       await Category.deleteMany({
         _id: {
-          $in: tempArr
-        }
-      })
+          $in: tempArr,
+        },
+      });
     }
-    return true
+    return true;
   } catch (error) {
-    console.log(error)
-    return null
+    console.log(error);
+    return null;
   }
-}
+};
 
-const aggregateFind = async (aggregationOperations) => Category.aggregate(aggregationOperations)
+const aggregateFind = async (aggregationOperations) => Category.aggregate(aggregationOperations);
+
+const parentCategoriesFind = async () => Category.find({ parent_category_id: null }).lean();
 
 module.exports = {
   createCategory,
   getCategories,
   deleteCategoryById,
-  aggregateFind
-}
+  aggregateFind,
+  parentCategoriesFind,
+};
