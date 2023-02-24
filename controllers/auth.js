@@ -73,7 +73,7 @@ const login = async (req, res) => {
       user.id,
       refreshToken
     )
-    delete user.password 
+      user.password = null
     return {
       status: 200,
       data: {
