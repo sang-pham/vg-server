@@ -19,10 +19,10 @@ const createCategory = async (req, res) => {
 
 const getParent = async (req, res) => {
   try {
-    let data =  await categoryService.parentCategoriesFind()
+    let data = await categoryService.parentCategoriesFind();
     return {
-      data:data
-    }
+      data: data,
+    };
   } catch (error) {
     logger.error(error);
   }
@@ -39,6 +39,16 @@ const getCategories = async (req, res) => {
     logger.error(error);
   }
 };
+
+const getTreeView = async (req, res)=>{
+  try{ 
+    let { parent_category_code, category_code } = req.query;
+    let data =  await categoryService.findCategoryByCode(parent_category_code, category_code);
+    return {data:data}
+  }catch(error){ 
+    logger.error(error);
+  }
+}
 
 const deleteCategory = async (req, res) => {
   const { id } = req.params;
@@ -64,4 +74,5 @@ module.exports = {
   getCategories,
   deleteCategory,
   getParent,
+  getTreeView
 };

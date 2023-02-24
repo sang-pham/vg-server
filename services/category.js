@@ -1,5 +1,7 @@
 const { Category, ObjectId } = require("../models");
 
+const logger = require("../utils/logger");
+
 const findByName = async (categoryName) => {
   return await Category.findOne({
     category_name: categoryName,
@@ -83,6 +85,39 @@ const deleteCategoryById = async (categoryId) => {
 
 const aggregateFind = async (aggregationOperations) => Category.aggregate(aggregationOperations);
 
+const findChildByParentCode = async (parentCode) => {
+  let query = {};
+  let result = [];
+  query["parent_category_code"] = parentCode;
+  let data = await Category.find(query).lean();
+  for (let i = 0; i < data.length; i++) {
+    let item = data[i];
+    let children = await findChildByParentCode(item?.category_code);
+    result.push({ ...item, children: children });
+    data["children"] = children;
+  }
+  return result;
+};
+
+const findCategoryByCode = async (parentCode, code) => {
+  let query = {};
+  if (parentCode) {
+    query["parent_category_code"] = parentCode;
+  } else {
+    query["parent_category_code"] = null;
+  }
+  let data = await Category.find(query).lean();
+  let result = [];
+  for (let i = 0; i < data.length; i++) {
+    let item = data[i];
+    let children = await findChildByParentCode(item?.category_code);
+    result.push({ ...item, children: children });
+    data["children"] = children;
+  }
+
+  return result;
+};
+
 const parentCategoriesFind = async () => Category.find({}).lean();
 
 module.exports = {
@@ -92,4 +127,5 @@ module.exports = {
   aggregateFind,
   parentCategoriesFind,
   findOne,
+  findCategoryByCode,
 };
