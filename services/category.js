@@ -106,6 +106,9 @@ const findCategoryByCode = async (parentCode, code) => {
   } else {
     query["parent_category_code"] = null;
   }
+  if(code){
+    query['category_code'] = code
+  }
   let data = await Category.find(query).lean();
   let result = [];
   for (let i = 0; i < data.length; i++) {
