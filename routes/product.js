@@ -16,6 +16,10 @@ router.post('',
   productValidator.validateCreateProduct,
   asyncHandle(productController.createProduct))
 
+router.put('/:id',
+  adminMiddleware(),
+  asyncHandle(productController.updateProduct))
+
 router.delete('/:id',
   adminMiddleware(),
   asyncHandle(productController.deleteProductById))

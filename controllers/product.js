@@ -40,6 +40,33 @@ const createProduct = async (req, res) => {
   }
 }
 
+const updateProduct = async (req, res) => {
+  try {
+    const {id} = req.params
+    const product = await productService.findBydId(id)
+    if (!product) {
+      return {
+        success: false,
+        message: `Product can't be found.`
+      }
+    }
+    for (const key in req.body) {
+      product[key] = req.body[key]
+    }
+    await product.save()
+    return {
+      success: true,
+      message: 'Update product successfully'
+    }
+  } catch (error) {
+    logger.error(error)
+    return {
+      success: false,
+      message: error.message || "Something is wrong"
+    }
+  }
+}
+
 const deleteProductById = async (req, res) => {
   try {
     let { id } = req.params
@@ -56,5 +83,6 @@ const deleteProductById = async (req, res) => {
 module.exports = {
   createProduct,
   deleteProductById,
-  getProducts
+  getProducts,
+  updateProduct
 }
