@@ -8,10 +8,10 @@ var path = require("path");
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "/usr/src/app/uploads");
+    cb(null, "uploads");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
+    cb(null, Date.now() + '-' + Math.floor(Math.random() * 100000) + path.extname(file.originalname));
   },
 });
 
@@ -20,5 +20,7 @@ var upload = multer({ storage: storage });
 const { asyncHandle } = ApiResponse;
 
 router.post("/upload", upload.single("file"), asyncHandle(fileController.uploadFile));
+
+router.post("/upload-multi", upload.array("files"), asyncHandle(fileController.uploadMultiFiles))
 
 module.exports = router;
