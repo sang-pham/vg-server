@@ -98,9 +98,45 @@ const resetPassword = async (req, res) => {
   }
 }
 
+const updateUser = async (req, res) => {
+  try {
+    let {id} = req.params
+    let user = await userService.findById(id)
+    if (!user) {
+      return {
+        success: false,
+        message: "User doesn't exist"
+      }
+    }
+    let userRole = user.role
+    let reqUser = req.user
+    if (userRole == 'admin' && reqUser.role != 'super_admin') {
+      return {
+        success: false,
+        message: "You don't have permission"
+      }
+    }
+    for (const key in req.body) {
+      user[key] = req.body[key]
+    }
+    await user.save()
+    return {
+      success: true,
+      message: 'Cập nhật user thành công'
+    }
+  } catch (error) {
+    logger.error(error)
+    return {
+      success: false,
+      message: error.message || 'Something was wrong'
+    }
+  }
+}
+
 module.exports = {
   createUser,
   deleteUser,
   getUsers,
-  resetPassword
+  resetPassword,
+  updateUser
 }

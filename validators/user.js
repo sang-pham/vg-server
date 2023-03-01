@@ -54,6 +54,22 @@ const commonValidateGet = {
   }
 }
 
+const validateUserId = checkSchema({
+  id: {
+    in: 'params',
+    custom: {
+      options: (value) => {
+        return validateObjectId(value, 'user_id')
+      }
+    },
+    customSanitizer: {
+      options: (value) => {
+        return ObjectId.isValid(value) ? new ObjectId(value) : value
+      }
+    }
+  }
+})
+
 const validateResetPassword = checkSchema({
   id: {
     in: 'params',
@@ -78,5 +94,6 @@ module.exports = {
   validateCreateUser,
   validateDeleteUser,
   validateGetUsers,
-  validateResetPassword
+  validateResetPassword,
+  validateUserId
 }

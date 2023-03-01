@@ -17,6 +17,10 @@ router.put('/reset-password/:id',
   userValidator.validateResetPassword,
   asyncHandle(userController.resetPassword))
 
+router.put('/:id',
+  userValidator.validateUserId,
+  asyncHandle(userController.updateUser))
+
 router.post('',
   userValidator.validateCreateUser,
   asyncHandle(userController.createUser))
