@@ -21,6 +21,9 @@ const productSchema = new Schema({
   updated: {
     type: Date,
     default: new Date()
+  },
+  status:{
+    type:Number
   }
 })
 
