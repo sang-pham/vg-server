@@ -1,4 +1,6 @@
 const {checkSchema} = require("express-validator")
+const { validateObjectId } = require('./common')
+const {ObjectId} = require('../models')
 
 const validateCreateProduct = checkSchema({
   product_type_code: {
@@ -28,6 +30,23 @@ const validateCreateProduct = checkSchema({
   // }
 })
 
+const validateUpdateProduct = checkSchema({
+  id: {
+    in: 'params',
+    custom: {
+      options: (value) => {
+        return validateObjectId(value, 'user_id')
+      }
+    },
+    customSanitizer: {
+      options: (value) => {
+        return ObjectId.isValid(value) ? new ObjectId(value) : value
+      }
+    }
+  }
+})
+
 module.exports = {
-  validateCreateProduct
+  validateCreateProduct,
+  validateUpdateProduct
 }

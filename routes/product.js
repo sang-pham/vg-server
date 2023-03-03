@@ -18,6 +18,7 @@ router.post('',
 
 router.put('/:id',
   adminMiddleware(),
+  productValidator.validateUpdateProduct,
   asyncHandle(productController.updateProduct))
 
 router.delete('/:id',

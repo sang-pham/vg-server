@@ -30,6 +30,12 @@ const genericSearchQuery = (requestQuery = {}) => {
   let matchObj = {}, sortObj = {}
   
   for (const key in queryFields) {
+    if (queryFields[key].includes(',')) {
+      matchObj[key] = {
+        "$in": queryFields[key].split(',')
+      }
+      continue
+    }
     if (['true', 'false'].indexOf(queryFields[key]) >= 0) {
       matchObj[key] = queryFields[key] == 'true' ? true : false
       continue

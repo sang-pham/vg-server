@@ -5,7 +5,7 @@ const getProducts = async (req, res) => {
   try {
     return await baseService.baseFind(
       req.query,
-      {service_category_code: 1, service_category_name: 1, created: 1, product_info: 1, updated: 1},
+      {product_type_code: 1, product_type_name: 1, created: 1, product_info: 1, updated: 1},
       productService.aggregateFind
     )
   } catch (error) {
@@ -45,7 +45,7 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const {id} = req.params
-    const product = await productService.findBydId(id)
+    const product = await productService.findById(id)
     if (!product) {
       return {
         success: false,
