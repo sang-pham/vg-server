@@ -14,6 +14,7 @@ const uploadFile = async (req, res) => {
 const uploadMultiFiles = async (req, res) => {
   try {
     logger.info(`File Controller upload multiple files start`);
+    logger.info(req.files)
     return fileService.uploadMultiFiles(req.files);
   } catch (error) {
     logger.error(`File Controller upload file error ${error}`);

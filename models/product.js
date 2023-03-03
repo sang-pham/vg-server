@@ -2,11 +2,11 @@ const mongoose = require('mongoose')
 const { Schema } = require('mongoose')
 
 const productSchema = new Schema({
-  service_category_code: {
+  product_type_code: {
     type: String,
     required: true
   },
-  service_category_name: {
+  product_type_name: {
     type: String,
     required: true
   },

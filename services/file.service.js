@@ -40,6 +40,7 @@ const uploadFile = async (file) => {
 };
 
 const uploadMultiFiles = async (files) => {
+  console.log(files)
   if (!files) return
   let uploadedFileLength = files.length
   const urlLists = []

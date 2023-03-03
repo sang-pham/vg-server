@@ -15,18 +15,20 @@ const getProducts = async (req, res) => {
 
 const createProduct = async (req, res) => {
   try {
-    const { service_category_code, service_category_name } = req.body
+    const { product_type_code } = req.body
     let category = await categoryService.findOne({
-      category_code: service_category_code,
-      category_name: service_category_name
+      category_code: product_type_code
     })
     if (!category) {
       return {
         success: false,
-        message: `Category ${service_category_name} can't be found.`
+        message: `Category ${product_type_code} can't be found.`
       }
     }
-    await productService.createProduct(req.body)
+    await productService.createProduct({
+      ...req.body,
+      product_type_name: category.category_name
+    })
     return {
       success: true,
       message: "Create product successfully"

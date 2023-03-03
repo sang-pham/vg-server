@@ -1,19 +1,9 @@
 const {checkSchema} = require("express-validator")
 
 const validateCreateProduct = checkSchema({
-  service_category_code: {
+  product_type_code: {
     in: 'body',
-    errorMessage: 'Service code must be filled',
-    trim: true,
-    isLength: {
-      options: {
-        min: 1
-      }
-    }
-  },
-  service_category_name: {
-    in: 'body',
-    errorMessage: 'Service name must be filled',
+    errorMessage: 'Product Type Code must be filled',
     trim: true,
     isLength: {
       options: {
