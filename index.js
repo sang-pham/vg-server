@@ -9,6 +9,7 @@ const settingRoute = require('./routes/setting')
 const categoryRoute = require('./routes/category')
 const fileRoute = require('./routes/file')
 const productRoute = require('./routes/product')
+const bookingRoute = require('./routes/booking')
 const cors = require('cors')
 const logger = require('./utils/logger')
 
@@ -41,6 +42,7 @@ app.use('/api/setting', settingRoute)
 app.use('/api/category', categoryRoute)
 app.use('/api/file', fileRoute)
 app.use('/api/product', productRoute)
+app.use('/api/booking', bookingRoute)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, (port) => {
