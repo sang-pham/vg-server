@@ -15,4 +15,12 @@ router.post('',
   adminMiddleware(),
   asyncHandle(bookingController.createBooking))
 
+router.put('/:id',
+  adminMiddleware(),
+  asyncHandle(bookingController.updateBooking))
+
+  router.delete('/:id',
+  adminMiddleware(),
+  asyncHandle(bookingController.deleteProductById))
+
 module.exports = router

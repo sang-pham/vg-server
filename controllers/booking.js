@@ -37,10 +37,52 @@ const createBooking = async (req, res) => {
       success: false,
       message: error.message || 'Something was wrong'
     }
-  } 
+  }
+}
+
+const updateBooking = async (req, res) => {
+  try {
+    const {id} = req.params
+    const booking = await bookingService.findById(id)
+    if (!booking) {
+      return {
+        success: false,
+        message: `Booking can't be found.`
+      }
+    }
+    for (const key in req.body) {
+      booking[key] = req.body[key]
+    }
+    await booking.save()
+    return {
+      success: true,
+      message: 'Update booking successfully'
+    }
+  } catch (error) {
+    logger.error(error)
+    return {
+      success: false,
+      message: error.message || "Something is wrong"
+    }
+  }
+}
+
+const deleteBookingById = async (req, res) => {
+  try {
+    let { id } = req.params
+    await bookingService.deleteById(id)
+  } catch (error) {
+    logger.error(error)
+    return {
+      success: false,
+      message: error.message || "Something is wrong"
+    }
+  }
 }
 
 module.exports = {
   createBooking,
-  getBookings
+  getBookings,
+  updateBooking,
+  deleteBookingById
 }
