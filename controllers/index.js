@@ -5,6 +5,7 @@ const categoryController = require('./category')
 const fileController = require('./file')
 const productController = require('./product')
 const bookingController = require('./booking')
+const orderController = require('./order')
 
 module.exports = {
   authController,
@@ -13,5 +14,6 @@ module.exports = {
   categoryController,
   fileController,
   productController,
-  bookingController
+  bookingController,
+  orderController
 }

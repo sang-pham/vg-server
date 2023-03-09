@@ -5,6 +5,7 @@ const categoryService = require('./category')
 const fileService = require('./file.service')
 const productService = require('./product')
 const bookingService = require('./booking')
+const orderService = require('./order')
 const baseService = require('./base')
 
 module.exports = {
@@ -15,5 +16,6 @@ module.exports = {
   fileService,
   productService,
   bookingService,
+  orderService,
   baseService
 }
