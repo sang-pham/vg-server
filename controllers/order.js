@@ -124,10 +124,50 @@ const deleteOrder = async (req, res) => {
   }
 }
 
+const getProductOrders = async (req, res) => {
+  try {
+    return await baseService.baseFind(
+      {
+        ...req.query,
+        order_type: 0
+      },
+      {user_info: 1, order_info: 1, created: 1, status: 1, updated: 1, product: 1},
+      orderService.aggregateFind
+    )
+  } catch (error) {
+    console.log(error)
+    return {
+      success: false,
+      message: error.message || 'Something was wrong'
+    }
+  }
+}
+
+const getBookingOrders = async (req, res) => {
+  try {
+    return await baseService.baseFind(
+      {
+        ...req.query,
+        order_type: 1
+      },
+      {user_info: 1, order_info: 1, created: 1, status: 1, updated: 1, booking: 1},
+      orderService.aggregateFind
+    )
+  } catch (error) {
+    console.log(error)
+    return {
+      success: false,
+      message: error.message || 'Something was wrong'
+    }
+  }
+}
+
 module.exports = {
   createProductOrder,
   createBookingOrder,
   getOwnProductOrder,
   getOwnBookingOrder,
-  deleteOrder
+  deleteOrder,
+  getProductOrders,
+  getBookingOrders
 }

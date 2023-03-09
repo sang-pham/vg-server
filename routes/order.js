@@ -22,4 +22,12 @@ router.get('/my-booking',
 router.delete('/:id',
   asyncHandle(orderController.deleteOrder))
 
+router.use(adminMiddleware())
+
+router.get('/product',
+  asyncHandle(orderController.getProductOrders))
+
+router.get('/booking',
+  asyncHandle(orderController.getBookingOrders))
+
 module.exports = router
