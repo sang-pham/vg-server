@@ -21,6 +21,6 @@ router.put('/:id',
 
   router.delete('/:id',
   adminMiddleware(),
-  asyncHandle(bookingController.deleteProductById))
+  asyncHandle(bookingController.deleteBookingById))
 
 module.exports = router

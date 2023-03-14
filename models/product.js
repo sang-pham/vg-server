@@ -22,6 +22,10 @@ const productSchema = new Schema({
     type: Date,
     default: new Date()
   },
+  is_deleted: {
+    type: Boolean,
+    default: false
+  },
   status:{
     type:Number
   }
