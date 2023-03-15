@@ -4,13 +4,16 @@ const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
 
 const authMiddleware = () => {
   return async (req, res, next) => {
-    if (!req.headers.authorization) {
+    let headers = req.headers;
+    let params = req.query;
+    if (!(headers.authorization || params?.token)) {
       return res.status(400).json({
         message: 'Token is required'
       })
     }
+    let token = headers.authorization ? headers.authorization.replace('Bearer ', '') : params?.token
     jwt.verify(
-      req.headers.authorization.replace('Bearer ', ''),
+      token,
       ACCESS_TOKEN_SECRET,
       (err, result) => {
         if (err) {
