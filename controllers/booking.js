@@ -30,7 +30,7 @@ const getBookings = async (req, res) => {
 
 const getBookingById = async (req, res) => {
   try {
-    const booking = bookingService.findById(req.params.id)
+    const booking = await bookingService.findById(req.params.id)
     return {
       success: true,
       message: 'Success',

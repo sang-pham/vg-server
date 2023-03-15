@@ -19,6 +19,7 @@ const bookingSchema = new Schema({
       _id: {
         type: mongoose.Types.ObjectId,
         requrie: true,
+        refPath: 'serviceModel'
       },
       price_detail: {
         type: Object,
@@ -27,6 +28,12 @@ const bookingSchema = new Schema({
       }
     }
   ],
+  serviceModel: {
+    type: String,
+    required: true,
+    enum: ['horse_services'],
+    default: 'horse_services'
+  },
   is_deleted: {
     type: Boolean,
     default: false
@@ -39,6 +46,16 @@ const bookingSchema = new Schema({
     type: Date,
     default: new Date()
   },
+}, {
+  virtuals: true
+})
+
+bookingSchema.virtual('bookingServices', {
+  ref: function() { 
+    return this.serviceModel;
+  },
+  localField: 'services._id',
+  foreignField: '_id'
 })
 
 const Booking = mongoose.model('bookings', bookingSchema)
