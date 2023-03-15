@@ -6,6 +6,7 @@ const fileController = require('./file')
 const productController = require('./product')
 const bookingController = require('./booking')
 const orderController = require('./order')
+const horseServiceController = require('./horse_service')
 
 module.exports = {
   authController,
@@ -15,5 +16,6 @@ module.exports = {
   fileController,
   productController,
   bookingController,
-  orderController
+  orderController,
+  horseServiceController
 }

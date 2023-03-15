@@ -11,6 +11,7 @@ const fileRoute = require('./routes/file')
 const productRoute = require('./routes/product')
 const bookingRoute = require('./routes/booking')
 const orderRoute = require('./routes/order')
+const horseServiceRoute = require('./routes/horse_service')
 const cors = require('cors')
 const logger = require('./utils/logger')
 
@@ -51,6 +52,7 @@ app.use('/api/file', fileRoute)
 app.use('/api/product', productRoute)
 app.use('/api/booking', bookingRoute)
 app.use('/api/order', orderRoute)
+app.use('/api/horse-service', horseServiceRoute)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, (port) => {

@@ -7,6 +7,7 @@ const File = require('./file')
 const Product = require('./product')
 const Booking = require('./booking')
 const Order = require('./order')
+const HorseService = require('./horse_service')
 const mongoDb = require('./db')
 const ObjectId = mongoose.Types.ObjectId
 
@@ -21,5 +22,6 @@ module.exports = {
   Product,
   Booking,
   Order,
+  HorseService,
   mongoDb
 }

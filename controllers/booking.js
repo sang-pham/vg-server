@@ -3,13 +3,45 @@ const { logger } = require('../utils')
 
 const getBookings = async (req, res) => {
   try {
+    const defaultAggregates = []
+    const { booking_type_code } = req.query
+    switch(booking_type_code) {
+      case 'HORSE_CLUB':
+        defaultAggregates.push({
+          $lookup: {
+            from: "horse_service",
+            localField: "services.service_id",
+            foreignField: "_id",
+            as: "bookingServices"
+          }
+        })
+      break;
+    }
     return await baseService.baseFind(
       req.query,
       {booking_type_code: 1, booking_type_name: 1, created: 1, booking_info: 1, updated: 1},
-      bookingService.aggregateFind
+      bookingService.aggregateFind,
+      defaultAggregates
     )
   } catch (error) {
     logger.error(error)
+  }
+}
+
+const getBookingById = async (req, res) => {
+  try {
+    const booking = bookingService.findById(req.params.id)
+    return {
+      success: true,
+      message: 'Success',
+      data: booking
+    }
+  } catch (error) {
+    logger.error(error)
+    return {
+      success: false,
+      message: error.message || 'Something was'
+    }
   }
 }
 
@@ -84,5 +116,6 @@ module.exports = {
   createBooking,
   getBookings,
   updateBooking,
-  deleteBookingById
+  deleteBookingById,
+  getBookingById
 }

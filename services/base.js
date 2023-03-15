@@ -26,7 +26,7 @@ function getOperationFromKey(value) {
   return value;
 }
 
-const baseFind = async (requestQuery, projectFields, aggregateFunc) => {
+const baseFind = async (requestQuery, projectFields, aggregateFunc, aggregates = []) => {
   let { page, size } = requestQuery;
   const pagingData = common.getLimitOffset({ limit: size, offset: page });
   const { match, sort } = common.genericSearchQuery(requestQuery);
@@ -38,6 +38,7 @@ const baseFind = async (requestQuery, projectFields, aggregateFunc) => {
   let aggregationOperations = paging.pagedAggregateQuery(pagingData.limit, pagingData.offset, [
     { $match: newMatch },
     { $project: projectFields },
+    ...aggregates,
     { $sort: Object.keys(sort).length ? sort : { created: -1 } },
   ]);
   let aggregationResult = await aggregateFunc(aggregationOperations);

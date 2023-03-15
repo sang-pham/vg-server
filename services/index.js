@@ -6,6 +6,7 @@ const fileService = require('./file.service')
 const productService = require('./product')
 const bookingService = require('./booking')
 const orderService = require('./order')
+const horseService = require('./horse_service')
 const baseService = require('./base')
 
 module.exports = {
@@ -17,5 +18,6 @@ module.exports = {
   productService,
   bookingService,
   orderService,
+  horseService,
   baseService
 }

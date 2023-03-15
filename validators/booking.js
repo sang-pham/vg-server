@@ -1,20 +1,7 @@
 const {checkSchema} = require("express-validator")
 const { validateObjectId } = require('./common')
 
-const validateCreateCategory = checkSchema({ 
-  category_name: {
-    in: 'body',
-    errorMessage: 'Tên danh mục không được để trống',
-    trim: true,
-    isLength: {
-      options: {
-        min: 1
-      }
-    }
-  }
-})
-
-const validateDeleteCategory = checkSchema({
+const validateBookingById = checkSchema({
   id: {
     in: 'param',
     custom: {
@@ -31,6 +18,5 @@ const validateDeleteCategory = checkSchema({
 })
 
 module.exports = {
-  validateCreateCategory,
-  validateDeleteCategory
+  validateBookingById
 }

@@ -14,6 +14,19 @@ const bookingSchema = new Schema({
     type: Object,
     default: {}
   },
+  services: [
+    {
+      service_id: {
+        type: mongoose.Types.ObjectId,
+        requrie: true,
+      },
+      price_detail: {
+        type: Object,
+        default: null,
+        required: true
+      }
+    }
+  ],
   is_deleted: {
     type: Boolean,
     default: false

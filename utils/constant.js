@@ -15,5 +15,49 @@ module.exports = {
     ORDER_DELIVERYING: 'Đang giao hàng',
     ORDER_RECEIVED: 'Nhận hàng thành công',
     ORDER_FAILED: 'Từ chối/Không nhận hàng'
+  },
+  HORSE_SERVICE_TYPE: ['JUST_FOR_ONE_DAY', 'COURSE', 'PICNIC', 'STAY'],
+  HORSE_PRICE_UNIT: ['PERSON', 'SET'],
+  VALID_HORSE_SERVICE_UNIT_TYPE: {
+    'PERSON': ['JUST_FOR_ONE_DAY', 'STAY', 'COURSE'],
+    'SET': ['UNIT']
+  },
+  HORSE_SERVICE_PRICE_MAP: {
+    'JUST_FOR_ONE_DAY': {
+      'child': {
+        price: 0,
+        note: '',
+        title: 'Trẻ em'
+      },
+      'adult': {
+        price: 0,
+        note: '',
+        title: 'Người lớn'
+      },
+      'weekend_child': {
+        price: 0,
+        note: '',
+        title: 'Trẻ em(cuối tuần)'
+      },
+      'weekend_adult': {
+        price: 0,
+        note: '',
+        title: 'Người lớn em(cuối tuần)'
+      }
+    },
+    'COURSE': {
+      price: 0,
+      number_of_months: 0,
+      number_of_sessions: 0,
+      note: ''
+    },
+    'PICNIC': {
+      price: 0,
+      note: ''
+    },
+    'STAY': {
+      price: 0,
+      note: ''
+    }
   }
 }
