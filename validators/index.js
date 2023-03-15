@@ -4,7 +4,7 @@ const categoryValidator = require('./category')
 const commonValidator = require('./common')
 const productValidator = require('./product')
 const horseServiceValidator = require('./horse_service')
-const bookingValidator = requrie('./booking')
+const bookingValidator = require('./booking')
 
 module.exports = {
   authValidator,
