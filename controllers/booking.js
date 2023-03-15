@@ -9,17 +9,17 @@ const getBookings = async (req, res) => {
       case 'HORSE_CLUB':
         defaultAggregates.push({
           $lookup: {
-            from: "horse_service",
-            localField: "services.service_id",
+            from: "horse_services",
+            localField: "services._id",
             foreignField: "_id",
-            as: "bookingServices"
+            as: "services"
           }
         })
       break;
     }
     return await baseService.baseFind(
       req.query,
-      {booking_type_code: 1, booking_type_name: 1, created: 1, booking_info: 1, updated: 1},
+      {booking_type_code: 1, booking_type_name: 1, created: 1, booking_info: 1, updated: 1, services: 1, bookingServices: 1},
       bookingService.aggregateFind,
       defaultAggregates
     )

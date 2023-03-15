@@ -31,14 +31,14 @@ const baseFind = async (requestQuery, projectFields, aggregateFunc, aggregates =
   const pagingData = common.getLimitOffset({ limit: size, offset: page });
   const { match, sort } = common.genericSearchQuery(requestQuery);
   let newMatch = {};
-  console.log(match, sort);
+  console.log(match, sort)
   Object.keys(match).forEach((key) => {
     newMatch[key] = getOperationFromKey(match[key]);
   });
   let aggregationOperations = paging.pagedAggregateQuery(pagingData.limit, pagingData.offset, [
     { $match: newMatch },
-    { $project: projectFields },
     ...aggregates,
+    { $project: projectFields },
     { $sort: Object.keys(sort).length ? sort : { created: -1 } },
   ]);
   let aggregationResult = await aggregateFunc(aggregationOperations);
