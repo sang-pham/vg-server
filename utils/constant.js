@@ -42,7 +42,7 @@ module.exports = {
       'weekend_adult': {
         price: 0,
         note: '',
-        title: 'Người lớn em(cuối tuần)'
+        title: 'Người lớn(cuối tuần)'
       }
     },
     'COURSE': {

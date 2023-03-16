@@ -5,6 +5,7 @@ const commonValidator = require('./common')
 const productValidator = require('./product')
 const horseServiceValidator = require('./horse_service')
 const bookingValidator = require('./booking')
+const orderValidator = require('./order')
 
 module.exports = {
   authValidator,
@@ -13,5 +14,6 @@ module.exports = {
   commonValidator,
   productValidator,
   horseServiceValidator,
-  bookingValidator
+  bookingValidator,
+  orderValidator
 }

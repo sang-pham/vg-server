@@ -25,6 +25,9 @@ const horseServiceSchema = new Schema({
       }
     */
   },
+  sets: [
+    {type: Schema.Types.ObjectId, ref: 'horse_club_sets'}
+  ],
   created: {
     type: Date,
     default: new Date()
@@ -38,6 +41,12 @@ const horseServiceSchema = new Schema({
     default: false
   },
 })
+
+// horseServiceSchema.virtual('sets', {
+//   ref: 'horse_club_sets',
+//   localField: 'sets._id',
+//   foreignField: 'service_id'
+// })
 
 const HorseService = mongoose.model('horse_services', horseServiceSchema)
  

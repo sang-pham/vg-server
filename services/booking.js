@@ -7,7 +7,16 @@ const createBooking = async (data) => {
 
 const aggregateFind = async (aggregationOperations) => Booking.aggregate(aggregationOperations)
 
-const findById = async (id) => Booking.findById(id).populate('services._id', 'service_info').lean()
+const findById = async (id) => {
+  const booking = await Booking.findById(id).populate({
+    path: 'services._id',
+    select: 'service_info',
+    populate: {
+      path: 'sets'
+    }
+  })
+  return booking
+}
 
 const deleteById = async (productId) => {
   await Booking.findByIdAndDelete(productId)

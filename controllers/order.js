@@ -162,6 +162,34 @@ const getBookingOrders = async (req, res) => {
   }
 }
 
+const createHorseClubOrder = async (req, res) => {
+  try {
+    let data = req.body
+    data.order_type = constant.ORDER_TYPE.BOOKING
+    data.status = "ORDER_SUCCESS"
+    let user = await userService.findById(req.user.user_id)
+    if (!user) {
+      throw new Error(`Invalid user ${req.user.user_id}`)
+    }
+    data.user_info = {
+      ...user.user_info,
+      user_id: user.id,
+      username: user.username
+    }
+    await orderService.createBookingOrder(data)
+    return {
+      success: true,
+      message: 'Tạo đơn hàng thành công'
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      success: false,
+      message: error.message || 'Something was wrong'
+    }
+  }
+}
+
 module.exports = {
   createProductOrder,
   createBookingOrder,
@@ -169,5 +197,6 @@ module.exports = {
   getOwnBookingOrder,
   deleteOrder,
   getProductOrders,
-  getBookingOrders
+  getBookingOrders,
+  createHorseClubOrder
 }
