@@ -17,4 +17,8 @@ router.post('',
   horseServiceValidator.validateCreateHorseService,
   asyncHandle(horseServiceController.createNewService))
 
+router.put('/:id',
+  adminMiddleware(),
+  asyncHandle(horseServiceController.updateService))
+
 module.exports = router

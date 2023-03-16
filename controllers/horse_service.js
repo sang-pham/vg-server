@@ -47,7 +47,35 @@ const getHorseServices = async (req, res) => {
   }
 }
 
+const updateService = async (req, res) => {
+  try {
+    const {id} = req.params
+    const service = await horseService.findById(id)
+    if (!service) {
+      return {
+        success: false,
+        message: `Service can't be found.`
+      }
+    }
+    for (const key in req.body) {
+      service[key] = req.body[key]
+    }
+    await service.save()
+    return {
+      success: true,
+      message: 'Update service successfully'
+    }
+  } catch (error) {
+    logger.error(error)
+    return {
+      success: false,
+      message: error.message || "Something is wrong"
+    }
+  }
+}
+
 module.exports = {
   createNewService,
-  getHorseServices
+  getHorseServices,
+  updateService
 }
