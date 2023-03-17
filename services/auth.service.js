@@ -1,12 +1,14 @@
 const nodemailer = require("nodemailer");
 const NodeCache = require("node-cache");
 const otpGenerator = require("random-otp");
-const logger = require("../utils/logger");
+const bcrpyt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-const { userService } = require("../services");
+const logger = require("../utils/logger"); 
+const { userService, userTokenService } = require("../services");
 const { User } = require("../models");
 const { constant } = require("../utils");
-const getMailTemplate = require("../utils/signup-confirm");
+const getMailTemplate = require("../utils/signup-confirm"); 
 
 const cache = new NodeCache();
 
@@ -97,15 +99,54 @@ const signupResendOTP = async (username) => {
   if (otp) {
     return;
   }
-  sendMail(username)
+  sendMail(username);
   return;
-  
 };
 
+const mobileSignIn = async (formData) => {
+  let userExist;
+  userExist = await User.exists({ username: formData.username });
+  if (!userExist) {
+    throw new Error(`Tài khoản không tồn tại`);
+  }
+  let user = await User.findOne({ username: formData.username });
+  if (user.verified === false) {
+    throw new Error(`Tài khoản chưa xác minh`);
+  }
+  const isPasswordMatch = await bcrpyt.compare(formData.password, user.password);
+  if (!isPasswordMatch) {
+    throw new Error(`Mật khẩu không chính xác`);
+  }
+  const accessToken = jwt.sign(
+    {
+      role: user.role,
+      username: user.username,
+      user_id: user.id,
+    },
+    process.env.ACCESS_TOKEN_SECRET || "SECRET",
+    { expiresIn: "1h" },
+  );
+  const refreshToken = jwt.sign(
+    {
+      role: user.role,
+      username: user.username,
+      user_id: user.id,
+    },
+    process.env.REFRESH_TOKEN_SECRET || "SECRET",
+    { expiresIn: "1w" },
+  );
+  await userTokenService.removeAndCreate(user.id, refreshToken);
+  return {
+    access_token: accessToken,
+    refresh_token: refreshToken,
+    user_info: user,
+  };
+};
 
 module.exports = {
   signup,
   mobileSignup,
   mobileVerifyAuth,
-  signupResendOTP
+  signupResendOTP,
+  mobileSignIn,
 };

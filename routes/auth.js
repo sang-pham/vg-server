@@ -14,6 +14,8 @@ router.post("/signin", authValidator.validateLoginInfo, asyncHandle(authControll
 
 router.post("/mobile-signup", authValidator.validateMobileLogin, asyncHandle(authController.mobileSignup));
 
+router.post("/mobile-signin", authValidator.validateMobileLogin, asyncHandle(authController.mobileSignIn));
+
 router.post(
   "/mobile-verify-auth/:username",
   authValidator.validateMobileOTPAuth,

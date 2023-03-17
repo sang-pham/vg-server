@@ -114,6 +114,24 @@ const mobileSignup = async (req, res) => {
   }
 };
 
+const mobileSignIn = async (req, res) => {
+  try {
+    let formData = req.body;
+    let data = await authService.mobileSignIn(formData);
+    return {
+      message: "Đăng nhập thành công",
+      status: 200,
+      data:data
+    };
+  } catch (err) {
+    logger.error(err);
+    return {
+      message: `${err.message}`,
+      status: 500,
+    };
+  }
+};
+
 const mobileVerifyAuth = async (req, res) => {
   try {
     let username = req.params?.username;
@@ -195,5 +213,6 @@ module.exports = {
   getNewAccessToken,
   mobileSignup,
   mobileVerifyAuth,
-  signupResendOTP
+  signupResendOTP,
+  mobileSignIn
 };
