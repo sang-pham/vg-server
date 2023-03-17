@@ -137,10 +137,11 @@ const mobileVerifyAuth = async (req, res) => {
     let username = req.params?.username; 
     let from = req.query.from;
     let formData = req.body;
-    await authService.mobileVerifyAuth(username, formData, from);
+   let data =   await authService.mobileVerifyAuth(username, formData, from);
     return {
       message: "Đăng ký thành công",
       status: 200,
+      data:data
     };
   } catch (err) {
     logger.error(err);
