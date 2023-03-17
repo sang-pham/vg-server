@@ -4,11 +4,11 @@ const otpGenerator = require("random-otp");
 const bcrpyt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const logger = require("../utils/logger"); 
+const logger = require("../utils/logger");
 const { userService, userTokenService } = require("../services");
 const { User } = require("../models");
 const { constant } = require("../utils");
-const getMailTemplate = require("../utils/signup-confirm"); 
+const getMailTemplate = require("../utils/signup-confirm");
 
 const cache = new NodeCache();
 
@@ -29,8 +29,35 @@ transport.verify(function (error, success) {
   }
 });
 
-function getCacheKey(username) {
+function getCacheKey(username) { 
   return `otp_user_${username}`;
+}
+
+function getToken(user) {
+  const accessToken = jwt.sign(
+    {
+      role: user.role,
+      username: user.username,
+      user_id: user.id,
+    },
+    process.env.ACCESS_TOKEN_SECRET || "SECRET",
+    { expiresIn: "1h" },
+  );
+  const refreshToken = jwt.sign(
+    {
+      role: user.role,
+      username: user.username,
+      user_id: user.id,
+    },
+    process.env.REFRESH_TOKEN_SECRET || "SECRET",
+    { expiresIn: "1w" },
+  );
+  user.password = null;
+  return {
+    access_token: accessToken,
+    refresh_token: refreshToken,
+    user_info: user,
+  };
 }
 
 async function sendMail(userData) {
@@ -42,6 +69,7 @@ async function sendMail(userData) {
   let otp = otpGenerator.generaterandomNumbers(6);
   let timeExpired = 120;
   cache.set(cacheKey, otp, timeExpired);
+  console.log(`Cache: `,cache.get(cacheKey) )
   let info = await transport.sendMail({
     from: '"Vietgangz 👻" <foo@example.com>',
     to: "linhdeptrai1029i@gmail.com", // list
@@ -73,7 +101,7 @@ const mobileSignup = async (formData) => {
   return { ...model };
 };
 
-const mobileVerifyAuth = async (username, formData) => {
+const mobileVerifyAuth = async (username, formData, from) => {
   let userExist;
   userExist = await User.exists({ username: username });
   if (!userExist) {
@@ -81,11 +109,13 @@ const mobileVerifyAuth = async (username, formData) => {
   }
   let cacheKey = getCacheKey(username);
   let otp = cache.get(cacheKey);
-  if (!otp || formData.otp !== otp) {
+  console.log(`OTP:`, otp)
+  if (!otp || formData.otp !== otp + '') {
     throw new Error(`Mã xác minh không đúng hoặc hết hạn`);
   }
   let model = await User.updateOne({ username: username }, { verified: true });
-  return { ...model };
+  let user = await User.findOne({ username: username });
+  return getToken(user);
 };
 
 const signupResendOTP = async (username) => {
@@ -93,13 +123,8 @@ const signupResendOTP = async (username) => {
   userExist = await User.exists({ username: username });
   if (!userExist) {
     throw new Error(`Tài khoản không tồn tại`);
-  }
-  let cacheKey = getCacheKey(username);
-  let otp = cache.get(cacheKey);
-  if (otp) {
-    return;
-  }
-  sendMail(username);
+  } 
+  sendMail({username:username});
   return;
 };
 
@@ -117,30 +142,8 @@ const mobileSignIn = async (formData) => {
   if (!isPasswordMatch) {
     throw new Error(`Mật khẩu không chính xác`);
   }
-  const accessToken = jwt.sign(
-    {
-      role: user.role,
-      username: user.username,
-      user_id: user.id,
-    },
-    process.env.ACCESS_TOKEN_SECRET || "SECRET",
-    { expiresIn: "1h" },
-  );
-  const refreshToken = jwt.sign(
-    {
-      role: user.role,
-      username: user.username,
-      user_id: user.id,
-    },
-    process.env.REFRESH_TOKEN_SECRET || "SECRET",
-    { expiresIn: "1w" },
-  );
-  await userTokenService.removeAndCreate(user.id, refreshToken);
-  return {
-    access_token: accessToken,
-    refresh_token: refreshToken,
-    user_info: user,
-  };
+
+  return getToken(user);
 };
 
 module.exports = {
