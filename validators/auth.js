@@ -113,8 +113,7 @@ const validateMobileOTPAuth= checkSchema({
 
 module.exports = {
   validateRegisterInfo,
-  validateLoginInfo,
-  validateMobileLogin,
+  validateLoginInfo, 
   validateMobileOTPAuth,
   validateMobileSignIn,
   validateMobileSignUp
