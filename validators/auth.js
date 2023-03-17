@@ -40,7 +40,30 @@ const validateLoginInfo = checkSchema({
   },
 });
 
-const validateMobileLogin = checkSchema({
+const validateMobileSignIn = checkSchema({
+  username: {
+    in: "body",
+    errorMessage: "Tên tài khoản không được để trống",
+    trim: true,
+    isLength: {
+      options: {
+        min: 1,
+      },
+    },
+  }, 
+  password: {
+    in: "body",
+    errorMessage: "Mật khẩu không được để trống",
+    trim: true,
+    isLength: {
+      options: {
+        min: 1,
+      },
+    },
+  },
+});
+
+const validateMobileSignUp = checkSchema({
   username: {
     in: "body",
     errorMessage: "Tên tài khoản không được để trống",
@@ -73,6 +96,7 @@ const validateMobileLogin = checkSchema({
   },
 });
 
+
 const validateMobileOTPAuth= checkSchema({
   otp: {
     in: "body",
@@ -91,5 +115,7 @@ module.exports = {
   validateRegisterInfo,
   validateLoginInfo,
   validateMobileLogin,
-  validateMobileOTPAuth
+  validateMobileOTPAuth,
+  validateMobileSignIn,
+  validateMobileSignUp
 };

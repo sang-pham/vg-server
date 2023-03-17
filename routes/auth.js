@@ -12,9 +12,9 @@ router.post("/signup", authValidator.validateRegisterInfo, asyncHandle(authContr
 
 router.post("/signin", authValidator.validateLoginInfo, asyncHandle(authController.login));
 
-router.post("/mobile-signup", authValidator.validateMobileLogin, asyncHandle(authController.mobileSignup));
+router.post("/mobile-signup", authValidator.validateMobileSignUp, asyncHandle(authController.mobileSignup));
 
-router.post("/mobile-signin", authValidator.validateMobileLogin, asyncHandle(authController.mobileSignIn));
+router.post("/mobile-signin", authValidator.validateMobileSignIn, asyncHandle(authController.mobileSignIn));
 
 router.post(
   "/mobile-verify-auth/:username",
