@@ -12,17 +12,32 @@ const getBookings = async (req, res) => {
             from: "horse_services",
             localField: "services._id",
             foreignField: "_id",
-            as: "services"
+            as: "_services"
           }
         })
       break;
     }
-    return await baseService.baseFind(
+    //temp fix
+    const {data, meta} = await baseService.baseFind(
       req.query,
-      {booking_type_code: 1, booking_type_name: 1, created: 1, booking_info: 1, updated: 1, services: 1, bookingServices: 1, tables: 1},
+      {booking_type_code: 1, booking_type_name: 1, created: 1, booking_info: 1, updated: 1, services: 1, bookingServices: 1, tables: 1, _services: 1},
       bookingService.aggregateFind,
       defaultAggregates
     )
+    for (const booking of data) {
+      if (booking.services && booking.services.length && booking._services && booking._services.length) {
+        let services = []
+        for (let i = 0; i < booking.services.length; i++) {
+          services.push({
+            ...booking._services[i],
+            price_detail: booking.services[i].price_detail || booking._services[i].price_detail
+          })
+        }
+        delete booking._services
+        booking.services = services
+      }
+    }
+    return {data, meta}
   } catch (error) {
     logger.error(error)
   }
