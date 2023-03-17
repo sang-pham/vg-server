@@ -40,6 +40,9 @@ const userSchema = new Schema({
   is_deleted: {
     type: Boolean,
     default: false
+  },
+  email:{ 
+    type: String,
   }
 });
 

@@ -8,6 +8,7 @@ const bookingService = require('./booking')
 const orderService = require('./order')
 const horseService = require('./horse_service')
 const baseService = require('./base')
+const authService = require('./auth.service')
 
 module.exports = {
   userService,
@@ -19,5 +20,6 @@ module.exports = {
   bookingService,
   orderService,
   horseService,
-  baseService
+  baseService,
+  authService
 }

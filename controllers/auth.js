@@ -1,7 +1,9 @@
-const { userService, userTokenService } = require("../services");
+const { userService, userTokenService, authService } = require("../services");
 const bcrpyt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+
+const logger = require("../utils/logger");
 
 const registInfo = async (req, res) => {
   const { username } = req.body;
@@ -95,6 +97,58 @@ const login = async (req, res) => {
   }
 };
 
+const mobileSignup = async (req, res) => {
+  try {
+    let formData = req.body;
+    await authService.mobileSignup(formData);
+    return {
+      message: "Vui lòng nhập mã xác thực được gửi đến mail",
+      status: 200,
+    };
+  } catch (err) {
+    logger.error(err);
+    return {
+      message: `${err.message}`,
+      status: 500,
+    };
+  }
+};
+
+const mobileVerifyAuth = async (req, res) => {
+  try {
+    let username = req.params?.username;
+    let formData = req.body;
+    await authService.mobileVerifyAuth(username, formData);
+    return {
+      message: "Đăng ký thành công",
+      status: 200,
+    };
+  } catch (err) {
+    logger.error(err);
+    return {
+      message: `${err.message}`,
+      status: 500,
+    };
+  }
+};
+
+const signupResendOTP = async (req, res) => {
+  try {
+    let username = req.params?.username;
+    await authService.signupResendOTP(username);
+    return {
+      message: "Gửi lại mã thành công",
+      status: 200,
+    };
+  } catch (err) {
+    logger.error(err);
+    return {
+      message: `${err.message}`,
+      status: 500,
+    };
+  }
+};
+
 const getNewAccessToken = async (req, res) => {
   const { refresh_token } = req.body;
   if (!refresh_token) {
@@ -139,4 +193,7 @@ module.exports = {
   signup,
   login,
   getNewAccessToken,
+  mobileSignup,
+  mobileVerifyAuth,
+  signupResendOTP
 };
