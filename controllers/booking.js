@@ -19,7 +19,7 @@ const getBookings = async (req, res) => {
     }
     return await baseService.baseFind(
       req.query,
-      {booking_type_code: 1, booking_type_name: 1, created: 1, booking_info: 1, updated: 1, services: 1, bookingServices: 1},
+      {booking_type_code: 1, booking_type_name: 1, created: 1, booking_info: 1, updated: 1, services: 1, bookingServices: 1, tables: 1},
       bookingService.aggregateFind,
       defaultAggregates
     )
@@ -54,10 +54,21 @@ const createBooking = async (req, res) => {
     if (!category) {
       throw new Error(`Invalid booking code ${booking_type_code}`)
     }
+    let numberOfTables = booking_info['number_of_tables']
+    let tables = []
+    if (numberOfTables) {
+      for (let i = 0; i < numberOfTables; i++) {
+        tables.push({
+          _id: Math.round(Math.random() * new Date().getTime()),
+          status: 0
+        })
+      }
+    }
     await bookingService.createBooking({
       booking_info,
       booking_type_code,
-      booking_type_name: category.category_name
+      booking_type_name: category.category_name,
+      tables
     })
     return {
       success: true,
@@ -84,6 +95,33 @@ const updateBooking = async (req, res) => {
     }
     for (const key in req.body) {
       booking[key] = req.body[key]
+    }
+    let {booking_info} = req.body
+    if (booking_info) {
+      let numberOfTables = booking_info['number_of_tables']
+      let currentNumOfTables = booking.booking_info['number_of_tables']
+      let tables = booking.tables
+      if (!tables || !tables.length) {
+        booking.tables = []
+        for (let i = 0; i < numberOfTables; i++) {
+          booking.tables.push({
+            _id: Math.round(Math.random() * new Date().getTime()),
+            status: 0
+          })
+        }
+      } else {
+        if (numberOfTables > currentNumOfTables) {
+          let sub = numberOfTables - currentNumOfTables
+          for (let i = 0; i < sub; i++) {
+            booking.tables.push({
+              _id: Math.round(Math.random() * new Date().getTime()),
+              status: 0
+            })
+          }
+        } else if (numberOfTables < currentNumOfTables) {
+          booking.tables = booking.tables.slice(0, numberOfTables)
+        }
+      }
     }
     await booking.save()
     return {

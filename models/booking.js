@@ -46,6 +46,19 @@ const bookingSchema = new Schema({
     type: Date,
     default: new Date()
   },
+  tables: [
+    {
+      _id: {
+        type: Number,
+        default: Math.round(Math.random() * new Date().getTime())
+      },
+      status: {
+        type: Number,
+        enum: [0, 1],
+        default: 0
+      }
+    }
+  ]
 }, {
   virtuals: true
 })
