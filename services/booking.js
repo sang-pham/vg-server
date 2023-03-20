@@ -7,7 +7,10 @@ const createBooking = async (data) => {
 
 const aggregateFind = async (aggregationOperations) => Booking.aggregate(aggregationOperations)
 
-const findById = async (id) => {
+const findById = async (id, withPopulate = true) => {
+  if (!withPopulate) {
+    return await Booking.findById(id)
+  }
   const booking = await Booking.findById(id).populate({
     path: 'services._id',
     select: 'service_info',

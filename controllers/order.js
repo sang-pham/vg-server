@@ -1,4 +1,5 @@
-const { orderService, userService, baseService } = require('../services')
+const { ObjectId } = require('../models')
+const { orderService, userService, baseService, bookingService } = require('../services')
 const { constant } = require('../utils')
 
 const createProductOrder = async (req, res) => {
@@ -167,16 +168,40 @@ const createHorseClubOrder = async (req, res) => {
     let data = req.body
     data.order_type = constant.ORDER_TYPE.BOOKING
     data.status = "ORDER_SUCCESS"
-    let user = await userService.findById(req.user.user_id)
+    console.log(req.user)
+    let user = await userService.findById(new ObjectId(req.user.user_id))
     if (!user) {
       throw new Error(`Invalid user ${req.user.user_id}`)
     }
     data.user_info = {
       ...user.user_info,
-      user_id: user.id,
+      user_id: user._id,
       username: user.username
     }
+    let booking = await bookingService.findById(data.booking_id, false)
+    if (!booking) {
+      throw new Error('Chi nhánh không tồn tại')
+    }
+    if (!booking.services || !booking.services.length) {
+      throw new Error('Chi nhánh chưa có dịch vụ nào')
+    }
+    let isExisted = booking.services.find(item => item._id.toString() == data.service_id)
+    if (!isExisted) {
+      throw new Error('Chi nhánh không tồn tại dịch vụ tương ứng')
+    }
+    let {order_info} = data
+    if (!order_info || !order_info.table_indexes || !order_info.table_indexes.length) {
+      throw new Error('Không đủ thông tin order')
+    }
+    for (const tableIndex of order_info.table_indexes) {
+      if (!booking.tables[tableIndex] || booking.tables[tableIndex].status) {
+        throw new Error(`Bàn số ${tableIndex + 1} đã được đặt`)
+      } else {
+        booking.tables[tableIndex].status = 1
+      }
+    }
     await orderService.createBookingOrder(data)
+    await booking.save()
     return {
       success: true,
       message: 'Tạo đơn hàng thành công'

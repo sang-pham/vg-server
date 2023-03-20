@@ -1,5 +1,6 @@
 const {checkSchema} = require("express-validator")
 const { validateObjectId } = require('./common')
+const { ObjectId } = require('../models')
 
 const validateCreateHorseClubOrder = checkSchema({
   booking_id: {
@@ -28,8 +29,13 @@ const validateCreateHorseClubOrder = checkSchema({
       }
     }
   },
-  booking_time: {
+  order_info: {
     in: 'body',
+    errorMessage: 'Order info must be filled',
+    notEmpty: true
+  },
+  booking_time: {
+    in: 'body.order_info',
     errorMessage: 'Booking time must be filled',
     trim: true,
     isLength: {
