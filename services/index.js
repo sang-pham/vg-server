@@ -7,6 +7,7 @@ const productService = require('./product')
 const bookingService = require('./booking')
 const orderService = require('./order')
 const horseService = require('./horse_service')
+const horseClubSetService = require('./horse_club_set')
 const baseService = require('./base')
 const authService = require('./auth.service')
 
@@ -21,5 +22,6 @@ module.exports = {
   orderService,
   horseService,
   baseService,
-  authService
+  authService,
+  horseClubSetService
 }

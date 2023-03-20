@@ -1,4 +1,4 @@
-const { bookingService, horseService, baseService } = require('../services')
+const { bookingService, horseService, baseService, horseClubSetService } = require('../services')
 const { logger, constant } = require('../utils')
 
 const updateMap = (myMap, values) => {
@@ -17,9 +17,14 @@ const createNewService = async (req, res) => {
   try {
     const { service_type } = req.body
     const price_detail = constant.HORSE_SERVICE_PRICE_MAP[service_type]
-
+    if (!price_detail) {
+      throw new Error('Loại dịch vụ không hợp lệ')
+    }
+    let sets = await horseClubSetService.findByServiceType(service_type)
+    sets = sets.map(item => item._id)
     await horseService.createNewService({
       ...req.body,
+      sets,
       price_detail
     })
     return {

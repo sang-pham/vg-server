@@ -12,7 +12,14 @@ const findByBookingId = async (bookingId) => {
   })
 }
 
+const findByServiceType = async (serviceType) => {
+  return HorseClubSet.find({
+    service_type: serviceType
+  })
+}
+
 module.exports = {
   create,
-  findByBookingId
+  findByBookingId,
+  findByServiceType
 }
