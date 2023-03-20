@@ -79,8 +79,33 @@ const updateService = async (req, res) => {
   }
 }
 
+const deleteService = async (req, res) => {
+  try {
+    const {id} = req.params
+    const service = await horseService.findById(id)
+    if (!service) {
+      return {
+        success: false,
+        message: `Service can't be found.`
+      }
+    }
+    await service.remove()
+    return {
+      success: true,
+      message: 'Remove service successfully'
+    }
+  } catch (error) {
+    logger.error(error)
+    return {
+      success: false,
+      message: error.message || "Something is wrong"
+    }
+  }
+}
+
 module.exports = {
   createNewService,
   getHorseServices,
-  updateService
+  updateService,
+  deleteService
 }

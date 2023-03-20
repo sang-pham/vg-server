@@ -29,6 +29,24 @@ const validateCreateHorseService = checkSchema({
   }
 })
 
+const validateDeleteHorseService = checkSchema({
+  id: {
+    in: 'req.params',
+    errorMessage: 'booking_id must be filled',
+    custom: {
+      options: (value) => {
+        return validateObjectId(value, 'id')
+      }
+    },
+    customSanitizer: {
+      options: (value) => {
+        return ObjectId.isValid(value) ? new ObjectId(value) : value
+      }
+    }
+  },
+})
+
 module.exports = {
-  validateCreateHorseService
+  validateCreateHorseService,
+  validateDeleteHorseService
 }

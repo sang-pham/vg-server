@@ -21,4 +21,8 @@ router.put('/:id',
   adminMiddleware(),
   asyncHandle(horseServiceController.updateService))
 
+router.delete('/:id',
+  horseServiceValidator.validateDeleteHorseService,
+  asyncHandle(horseServiceController.deleteService))
+
 module.exports = router
