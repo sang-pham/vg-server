@@ -37,7 +37,17 @@ const orderSchema = new Schema({
   },
   booking: {
     type: Object,
-    default: null
+    required: false,
+    default: {
+      booking_id: {
+        type: Schema.Types.Object,
+        ref: 'bookings'
+      },
+      service_id: {
+        type: Schema.Types.Object,
+        default: null
+      }
+    }
   }
 })
 

@@ -35,7 +35,7 @@ const genericSearchQuery = (requestQuery = {}) => {
       matchObj[key] = queryFields[key]
       continue
     }
-    if (queryFields[key].includes(',')) {
+    if (queryFields[key].includes && queryFields[key].includes(',')) {
       matchObj[key] = {
         "$in": queryFields[key].split(',')
       }

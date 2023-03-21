@@ -1,6 +1,6 @@
 const { ObjectId } = require('../models')
 const { orderService, userService, baseService, bookingService } = require('../services')
-const { constant } = require('../utils')
+const { constant, logger } = require('../utils')
 
 const createProductOrder = async (req, res) => {
   try {
@@ -168,7 +168,6 @@ const createHorseClubOrder = async (req, res) => {
     let data = req.body
     data.order_type = constant.ORDER_TYPE.BOOKING
     data.status = "ORDER_SUCCESS"
-    console.log(req.user)
     let user = await userService.findById(new ObjectId(req.user.user_id))
     if (!user) {
       throw new Error(`Invalid user ${req.user.user_id}`)
@@ -200,6 +199,11 @@ const createHorseClubOrder = async (req, res) => {
         booking.tables[tableIndex].status = 1
       }
     }
+    data.booking = {
+      booking_type_code: booking.booking_type_code,
+      service_id: data.service_id,
+      booking_id:  data.booking_id
+    }
     await orderService.createBookingOrder(data)
     await booking.save()
     return {
@@ -207,7 +211,112 @@ const createHorseClubOrder = async (req, res) => {
       message: 'Tạo đơn hàng thành công'
     }
   } catch (error) {
-    console.log(error)
+    logger.error(error)
+    return {
+      success: false,
+      message: error.message || 'Something was wrong'
+    }
+  }
+}
+
+const getHorseClubOrders = async (req, res) => {
+  try {
+    const defaultAggregates = []
+    defaultAggregates.push(...[{
+      $lookup: {
+        from: "bookings",
+        localField: "booking.booking_id",
+        foreignField: "_id",
+        as: "bookings"
+      }},
+      {
+        $unwind: {
+          path: '$bookings',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $lookup: {
+          from: "horse_services",
+          localField: "booking.service_id",
+          foreignField: "_id",
+          as: "services"
+        }
+      },
+      {
+        $unwind: {
+          path: '$services',
+          preserveNullAndEmptyArrays: true
+        }
+      }
+    ])
+
+    return await baseService.baseFind(
+      {
+        ...req.query,
+        order_type: 1,
+        is_deleted: false
+      },
+      {user_info: 1, order_info: 1, created: 1, status: 1, updated: 1, booking: 1, bookings: 1, services: 1},
+      orderService.aggregateFind,
+      defaultAggregates
+    )
+  } catch (error) {
+    logger.error(error)
+    return {
+      success: false,
+      message: error.message || 'Something was wrong'
+    }
+  }
+}
+
+const getOwnHorseClubOrders = async (req, res) => {
+  try {
+    let userId = req.user.user_id
+    const defaultAggregates = []
+    defaultAggregates.push(...[{
+      $lookup: {
+        from: "bookings",
+        localField: "booking.booking_id",
+        foreignField: "_id",
+        as: "bookings"
+      }},
+      {
+        $unwind: {
+          path: '$bookings',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $lookup: {
+          from: "horse_services",
+          localField: "booking.service_id",
+          foreignField: "_id",
+          as: "services"
+        }
+      },
+      {
+        $unwind: {
+          path: '$services',
+          preserveNullAndEmptyArrays: true
+        }
+      }
+    ])
+
+    console.log(userId)
+    return await baseService.baseFind(
+      {
+        ...req.query,
+        order_type: 1,
+        'user_info.user_id': ObjectId(userId),
+        is_deleted: false
+      },
+      {user_info: 1, order_info: 1, created: 1, status: 1, updated: 1, booking: 1, bookings: 1, services: 1},
+      orderService.aggregateFind,
+      defaultAggregates
+    )
+  } catch (error) {
+    logger.error(error)
     return {
       success: false,
       message: error.message || 'Something was wrong'
@@ -223,5 +332,7 @@ module.exports = {
   deleteOrder,
   getProductOrders,
   getBookingOrders,
-  createHorseClubOrder
+  createHorseClubOrder,
+  getHorseClubOrders,
+  getOwnHorseClubOrders
 }

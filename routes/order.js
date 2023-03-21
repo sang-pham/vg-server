@@ -24,6 +24,9 @@ router.get('/my-booking',
 router.delete('/:id',
   asyncHandle(orderController.deleteOrder))
 
+router.get('/booking/horse-club/me',
+  asyncHandle(orderController.getOwnHorseClubOrders))
+
 router.use(adminMiddleware())
 
 router.get('/product',
@@ -32,4 +35,7 @@ router.get('/product',
 router.get('/booking',
   asyncHandle(orderController.getBookingOrders))
 
+router.get('/booking/horse-club',
+  asyncHandle(orderController.getHorseClubOrders))
+  
 module.exports = router
