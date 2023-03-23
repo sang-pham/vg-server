@@ -250,6 +250,12 @@ const getHorseClubOrders = async (req, res) => {
         }
       }
     ])
+    if (req.query['booking.booking_id']) {
+      req.query['booking.booking_id'] = new ObjectId(req.query['booking.booking_id'])
+    }
+    if (req.query['booking.service_id']) {
+      req.query['booking.service_id'] = new ObjectId(req.query['booking.service_id'])
+    }
 
     return await baseService.baseFind(
       {
