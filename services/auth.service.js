@@ -3,6 +3,7 @@ const NodeCache = require("node-cache");
 const otpGenerator = require("random-otp");
 const bcrpyt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { createClient } = require("redis");
 
 const logger = require("../utils/logger");
 const { userService, userTokenService } = require("../services");
@@ -11,6 +12,19 @@ const { constant } = require("../utils");
 const getMailTemplate = require("../utils/signup-confirm");
 
 const cache = new NodeCache();
+
+const client = createClient({ url: `redis://:Linh1998@@${process.env.DB_HOST}:6379/0`, expire: 60 });
+
+client.connect();
+
+client.on("error", (err) => console.log("Redis Client Error", err));
+
+client.set("key1", "value");
+
+client.expire('key1', 60)
+// client.get("key1").then((value) => {
+//   console.log(value);
+// });
 
 const transport = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -29,8 +43,10 @@ transport.verify(function (error, success) {
   }
 });
 
-function getCacheKey(username) { 
-  return `otp_user_${username}`;
+function getCacheKey(username) {
+  let cacheKey = `otp_user_${username}`;
+  console.log(`Get cache key:`, cacheKey);
+  return cacheKey;
 }
 
 function getToken(user) {
@@ -68,11 +84,12 @@ async function sendMail(userData) {
   }
   let otp = otpGenerator.generaterandomNumbers(6);
   let timeExpired = 120;
-  cache.set(cacheKey, otp, timeExpired);
-  console.log(`Cache: `,cache.get(cacheKey) )
+  client.set(cacheKey, otp);
+  cache.set(cacheKey, otp, "EX", timeExpired);
+  console.log(`Cache: `, cache.get(cacheKey));
   let info = await transport.sendMail({
     from: '"Vietgangz 👻" <foo@example.com>',
-    to: "linhdeptrai1029i@gmail.com", // list
+    to: userData?.email, // list
     subject: "[Vietgangz] Mã xác minh ✔",
     text: "Hello world?",
     html: getMailTemplate({ otp: otp }),
@@ -108,9 +125,9 @@ const mobileVerifyAuth = async (username, formData, from) => {
     throw new Error(`Tài khoản không tồn tại`);
   }
   let cacheKey = getCacheKey(username);
-  let otp = cache.get(cacheKey);
-  console.log(`OTP:`, otp)
-  if (!otp || formData.otp !== otp + '') {
+  let otp = client.get(cacheKey);
+  console.log(`OTP:`, otp);
+  if (!otp || formData.otp !== otp + "") {
     throw new Error(`Mã xác minh không đúng hoặc hết hạn`);
   }
   let model = await User.updateOne({ username: username }, { verified: true });
@@ -123,8 +140,8 @@ const signupResendOTP = async (username) => {
   userExist = await User.exists({ username: username });
   if (!userExist) {
     throw new Error(`Tài khoản không tồn tại`);
-  } 
-  sendMail({username:username});
+  }
+  sendMail({ username: username });
   return;
 };
 
