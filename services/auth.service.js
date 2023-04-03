@@ -17,11 +17,7 @@ const client = createClient({ url: `redis://:Linh1998@@${process.env.DB_HOST}:63
 
 client.connect();
 
-client.on("error", (err) => console.log("Redis Client Error", err));
-
-client.set("key1", "value");
-
-client.expire('key1', 60)
+client.on("error", (err) => console.log("Redis Client Error", err)); 
 // client.get("key1").then((value) => {
 //   console.log(value);
 // });
@@ -43,7 +39,7 @@ transport.verify(function (error, success) {
   }
 });
 
-function getCacheKey(username) {
+async function getCacheKey(username) {
   let cacheKey = `otp_user_${username}`;
   console.log(`Get cache key:`, cacheKey);
   return cacheKey;
@@ -77,16 +73,17 @@ function getToken(user) {
 }
 
 async function sendMail(userData) {
-  let cacheKey = getCacheKey(userData.username);
-  if (cache.get(cacheKey)) {
-    // ignore if already cached
-    return;
+  let cacheKey = await getCacheKey(userData.username);
+  let currentOtp = await client.get(cacheKey);
+  if (currentOtp) {
+
+    // ignore if already cached 
+    await client.del(cacheKey);
   }
   let otp = otpGenerator.generaterandomNumbers(6);
   let timeExpired = 120;
-  client.set(cacheKey, otp);
-  cache.set(cacheKey, otp, "EX", timeExpired);
-  console.log(`Cache: `, cache.get(cacheKey));
+  await client.set(cacheKey, otp);
+  await client.expire(cacheKey, timeExpired); 
   let info = await transport.sendMail({
     from: '"Vietgangz 👻" <foo@example.com>',
     to: userData?.email, // list
@@ -120,18 +117,20 @@ const mobileSignup = async (formData) => {
 
 const mobileVerifyAuth = async (username, formData, from) => {
   let userExist;
+  console.log("otp:", formData);
   userExist = await User.exists({ username: username });
   if (!userExist) {
     throw new Error(`Tài khoản không tồn tại`);
   }
-  let cacheKey = getCacheKey(username);
-  let otp = client.get(cacheKey);
+  let cacheKey = await getCacheKey(username);
+  let otp = await client.get(cacheKey);
   console.log(`OTP:`, otp);
   if (!otp || formData.otp !== otp + "") {
     throw new Error(`Mã xác minh không đúng hoặc hết hạn`);
   }
   let model = await User.updateOne({ username: username }, { verified: true });
   let user = await User.findOne({ username: username });
+  await client.del(cacheKey);
   return getToken(user);
 };
 
