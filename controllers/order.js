@@ -199,6 +199,13 @@ const createHorseClubOrder = async (req, res) => {
         booking.tables[tableIndex].status = 1
       }
     }
+    if (order_info) {
+      let paymentType = order_info.payment_type
+      if (paymentType && (paymentType == 'MOMO' || paymentType == 'BANK')) {
+        order_info.payment_code = Math.round(((Math.random() * 0.9) + 0.1) * Math.pow(10, 8)) + ''
+        data.status = "WAIT_FOR_PAY"
+      }
+    }
     data.booking = {
       booking_type_code: booking.booking_type_code,
       service_id: data.service_id,

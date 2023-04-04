@@ -8,13 +8,19 @@ module.exports = {
     BOOKING: 1,
   },
   ORDER_STATUS: {
-    ORDER_SUCCESS: "Đặt hàng thành công/Chờ xác nhận",
+    ORDER_SUCCESS: "Đặt hàng thành công",
     ORDER_COMFIRM: "Xác nhận đặt hàng",
     ORDER_PREPARING: "Đang chuẩn bị hàng",
     ORDER_TRANSFORM: "Đã giao cho đơn vị vận chuyển",
     ORDER_DELIVERYING: "Đang giao hàng",
     ORDER_RECEIVED: "Nhận hàng thành công",
     ORDER_FAILED: "Từ chối/Không nhận hàng",
+    WAIT_FOR_PAY: "Chờ thanh toán"
+  },
+  PAYMENT_TYPE: {
+    MOMO: 'MOMO',
+    BANK: 'Chuyển khoản ngân hàng',
+    CASH: 'Tiền mặt'
   },
   HORSE_SERVICE_TYPE: ["JUST_FOR_ONE_DAY", "COURSE", "PICNIC", "STAY"],
   HORSE_PRICE_UNIT: ["PERSON", "SET"],
