@@ -9,16 +9,18 @@ const userSchema = new Schema({
     required: true,
     unique: true
   },
+  full_name: {
+    type: String
+  },
+  address: {
+    type: String
+  },
   password: {
     type: String
   },
-  phoneNumber: {
+  phone_number: {
     type: String
-  },
-  user_info: {
-    type: Object,
-    required: false
-  },
+  }, 
   created_by: {
     type: Object,
     required: false

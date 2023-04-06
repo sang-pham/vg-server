@@ -9,8 +9,7 @@ const {asyncHandle} = ApiResponse
 
 router.use(authMiddleware(), adminMiddleware())
 
-router.get('',
-  userValidator.validateGetUsers,
+router.get('', 
   asyncHandle(userController.getUsers))
 
 router.put('/reset-password/:id',

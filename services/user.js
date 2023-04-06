@@ -61,6 +61,11 @@ const createUser = async (userInfo) => {
   })
 }
 
+const findAll = async () => {
+  return await User.find({}).lean()
+}
+
+
 const aggregateFind = async (aggregationOperations) => User.aggregate(aggregationOperations)
 
 module.exports = {
@@ -69,5 +74,6 @@ module.exports = {
   createUser,
   findById,
   deleteUser,
-  aggregateFind
+  aggregateFind,
+  findAll
 }

@@ -12,6 +12,9 @@ const productRoute = require('./routes/product')
 const bookingRoute = require('./routes/booking')
 const orderRoute = require('./routes/order')
 const horseServiceRoute = require('./routes/horse_service')
+const horseRoute = require("./routes/horse")
+const configRoute = require("./routes/configs")
+
 const cors = require('cors')
 const logger = require('./utils/logger')
 
@@ -22,6 +25,14 @@ app.use(express.static('public'))
 app.use(cors())
 
 app.all('/*', function(req, res, next) {
+  logger.info("Request " + req.url)
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
+app.all('/*', function(req, res, error, next) {
+  logger.error("error " + error)
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   next();
@@ -45,7 +56,7 @@ app.get('/auth/google/callback', passport.authenticate('google',  {
 });
 
 app.use('/', authRoute)
-app.use('/api/user', userRoute)
+app.use('/api/admin-accounts', userRoute)
 app.use('/api/setting', settingRoute)
 app.use('/api/category', categoryRoute)
 app.use('/api/file', fileRoute)
@@ -53,6 +64,8 @@ app.use('/api/product', productRoute)
 app.use('/api/booking', bookingRoute)
 app.use('/api/order', orderRoute)
 app.use('/api/horse-service', horseServiceRoute)
+app.use('/api/horse-club', horseRoute)
+app.use('/api/configs', configRoute)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, (port) => {

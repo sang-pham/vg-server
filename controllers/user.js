@@ -3,11 +3,15 @@ const { constant, logger } = require('../utils')
 
 const getUsers = async (req, res) => {
   try {
-    return await baseService.baseFind(
-      req.query,
-      {username: 1, role: 1, created: 1, user_info: 1, is_deleted: 1, updated: 1},
-      userService.aggregateFind
-    )
+    let data =  await userService.findAll()
+    data.forEach((item, index)=>{
+      data[index]['password'] = null
+    })
+    return {
+      success: true,
+      message: 200,
+      data:data
+    }
   } catch (error) {
     logger.error(error)
   }
