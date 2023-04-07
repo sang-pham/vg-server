@@ -2,6 +2,7 @@ const configs = [
   {
     key: "HORSE_SERVICE",
     description:'Cấu hình liên quan đến VietgangzHorse',
+    name:'Cấu hình VietgangzHorse',
     configs: {
       services: {
         KHOA_THAM_QUAN: {
@@ -12,6 +13,7 @@ const configs = [
             low_children: 66000,
             high_children: 699000,
           },
+          thumbnail:'https://vietgangz.com/wp-content/uploads/2022/09/293382954_192792019752648_120047178045655581_n-267x400.jpg',
           number: 1,
           content:
             "QK tự do tham quan sở thú mini, học cách làm quen và cho thú ăn, tự do chụp hình check-in tại nông trại không giới hạn thời gian, miễn phí đồ uống.",
@@ -25,6 +27,7 @@ const configs = [
             low_children: 66000,
             high_children: 699000,
           },
+          thumbnail:'https://vietgangz.com/wp-content/uploads/2022/09/293382954_192792019752648_120047178045655581_n-267x400.jpg',
           number: 2,
           description: "description",
         },
@@ -36,6 +39,7 @@ const configs = [
             low_children: 66000,
             high_children: 699000,
           },
+          thumbnail:'https://vietgangz.com/wp-content/uploads/2022/09/293382954_192792019752648_120047178045655581_n-267x400.jpg',
           number: 3,
           description: "description",
         },
@@ -47,6 +51,7 @@ const configs = [
             low_children: 66000,
             high_children: 699000,
           },
+          thumbnail:'https://vietgangz.com/wp-content/uploads/2022/09/293382954_192792019752648_120047178045655581_n-267x400.jpg',
           number: 4,
           description: "description",
         },
@@ -58,6 +63,7 @@ const configs = [
             low_children: 66000,
             high_children: 699000,
           },
+          thumbnail:'https://vietgangz.com/wp-content/uploads/2022/09/293382954_192792019752648_120047178045655581_n-267x400.jpg',
           number: 5,
           description: "description",
         },
@@ -70,6 +76,7 @@ const configs = [
             high_children: 999000,
             high_children: 699000,
           },
+          thumbnail:'https://vietgangz.com/wp-content/uploads/2022/09/293382954_192792019752648_120047178045655581_n-267x400.jpg',
           number: 6,
           description: "description",
         },
@@ -81,6 +88,7 @@ const configs = [
             low_children: 699000,
             high_children: 699000,
           },
+          thumbnail:'https://vietgangz.com/wp-content/uploads/2022/09/293382954_192792019752648_120047178045655581_n-267x400.jpg',
           number: 7,
           description: "description",
         },
@@ -92,15 +100,47 @@ const configs = [
             low_children: 999000,
             high_children: 699000,
           },
+          thumbnail:'https://vietgangz.com/wp-content/uploads/2022/09/293382954_192792019752648_120047178045655581_n-267x400.jpg',
           number: 8,
           description: "description",
         },
       },
       tenants: [
         {
-          tenantName: "",
-          address: "",
+          tenantName: "Vietgangz Horse Club Saigon",
+          address: "88 đường số 9 – phường Long Phước – Quận 9",
           slot: [{ slotName: 1, status: 1, orderId: "" }],
+          thumbnail:'https://vietgangz.com/wp-content/uploads/2022/04/z3321486777130_c9d6d793343ab69095fec14a8c1955aa-300x400.jpg'
+        },
+        {
+          tenantName: "Vietgangz Horse Club Hanoi",
+          address: "Khu du lịch Đầm Trành – phường Thạch Bàn – Quận Long Biên",
+          slot: [{ slotName: 1, status: 1, orderId: "" }],
+          thumbnail:'https://vietgangz.com/wp-content/uploads/2022/04/z3321486777130_c9d6d793343ab69095fec14a8c1955aa-300x400.jpg'
+        },
+        {
+          tenantName: "Vietgangz Horse Club Danang",
+          address: "88 đường",
+          slot: [{ slotName: 1, status: 1, orderId: "" }],
+          thumbnail:'https://vietgangz.com/wp-content/uploads/2022/04/z3321486777130_c9d6d793343ab69095fec14a8c1955aa-300x400.jpg'
+        },
+        {
+          tenantName: "Vietgangz Horse Club Saigon",
+          address: "88 đường số 9 – phường Long Phước – Quận 9",
+          slot: [{ slotName: 1, status: 1, orderId: "" }],
+          thumbnail:'https://vietgangz.com/wp-content/uploads/2022/04/z3321486777130_c9d6d793343ab69095fec14a8c1955aa-300x400.jpg'
+        },
+        {
+          tenantName: "Vietgangz Horse Club Saigon",
+          address: "88 đường số 9 – phường Long Phước – Quận 9",
+          slot: [{ slotName: 1, status: 1, orderId: "" }],
+          thumbnail:'https://vietgangz.com/wp-content/uploads/2022/04/z3321486777130_c9d6d793343ab69095fec14a8c1955aa-300x400.jpg'
+        },
+        {
+          tenantName: "Vietgangz Horse Club Saigon",
+          address: "88 đường số 9 – phường Long Phước – Quận 9",
+          slot: [{ slotName: 1, status: 1, orderId: "" }],
+          thumbnail:'https://vietgangz.com/wp-content/uploads/2022/04/z3321486777130_c9d6d793343ab69095fec14a8c1955aa-300x400.jpg'
         },
       ],
     },

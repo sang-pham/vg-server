@@ -16,8 +16,12 @@ router.use(authMiddleware())
 
 // API for config service_infos and tenant info 
 router.get('/',
+adminMiddleware(),
+asyncHandle(configController.getConfig))
+
+router.get('/:key',
   adminMiddleware(),
-  asyncHandle(configController.getConfig))
+  asyncHandle(configController.getConfigDetail))
 
 // router.delete('/configs/:id',
 //   horseServiceValidator.validateDeleteHorseService,
