@@ -23,7 +23,21 @@ const getConfigDetail = async (req, res) => {
   }
 };
 
+const updateByKey = async (req, res) => {
+  const key = req.params?.key 
+  const body = req.body
+  try {
+    let data = await configService.updateByKey(key, body);
+    return {
+        success:true, data:data
+    }
+  } catch (error) {
+    logger.error(error);
+  }
+};
+
 module.exports = {
     getConfig:getConfig,
-    getConfigDetail:getConfigDetail
+    getConfigDetail:getConfigDetail,
+    updateByKey:updateByKey
 }

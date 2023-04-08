@@ -23,6 +23,11 @@ router.get('/:key',
   adminMiddleware(),
   asyncHandle(configController.getConfigDetail))
 
+  router.put('/:key',
+  adminMiddleware(),
+  asyncHandle(configController.updateByKey))
+
+
 // router.delete('/configs/:id',
 //   horseServiceValidator.validateDeleteHorseService,
 //   asyncHandle(configService.deleteService))
