@@ -18,7 +18,7 @@ const configs = [
           number: 1,
           content:
             "QK tự do tham quan sở thú mini, học cách làm quen và cho thú ăn, tự do chụp hình check-in tại nông trại không giới hạn thời gian, miễn phí đồ uống.",
-          description: "description",
+          description: "<div>a</div>",
         },
         KHOA_CUOI_NGUA_TRAI_NGHIEM: {
           service_name: "Khóa cưỡi ngựa trải nghiệm",
@@ -31,7 +31,7 @@ const configs = [
           thumbnail:
             "https://vietgangz.com/wp-content/uploads/2022/09/293382954_192792019752648_120047178045655581_n-267x400.jpg",
           number: 2,
-          description: "description",
+          description: "<div>a</div>",
         },
         KHOA_HOC_CO_BAN: {
           service_name: "Khóa học cơ bản",
@@ -41,10 +41,12 @@ const configs = [
             low_children: 66000,
             high_children: 699000,
           },
+          content:
+            "QK tự do tham quan sở thú mini, học cách làm quen và cho thú ăn, tự do chụp hình check-in tại nông trại không giới hạn thời gian, miễn phí đồ uống.",
           thumbnail:
             "https://vietgangz.com/wp-content/uploads/2022/09/293382954_192792019752648_120047178045655581_n-267x400.jpg",
           number: 3,
-          description: "description",
+          description: "<div>a</div>",
         },
         KHOA_HOC_NANG_CAO: {
           service_name: "Khóa học nâng cao",
@@ -54,10 +56,13 @@ const configs = [
             low_children: 66000,
             high_children: 699000,
           },
+          content:
+            "QK tự do tham quan sở thú mini, học cách làm quen và cho thú ăn, tự do chụp hình check-in tại nông trại không giới hạn thời gian, miễn phí đồ uống.",
+          shortDescription:'mô tả ngắn',
           thumbnail:
             "https://vietgangz.com/wp-content/uploads/2022/09/293382954_192792019752648_120047178045655581_n-267x400.jpg",
           number: 4,
-          description: "description",
+          description: "<div>a</div>",
         },
         KHOA_CHUYEN_NGHIEP: {
           service_name: "Khóa chuyên nghiệp",
@@ -67,10 +72,12 @@ const configs = [
             low_children: 66000,
             high_children: 699000,
           },
+          content:
+            "QK tự do tham quan sở thú mini, học cách làm quen và cho thú ăn, tự do chụp hình check-in tại nông trại không giới hạn thời gian, miễn phí đồ uống.",
           thumbnail:
             "https://vietgangz.com/wp-content/uploads/2022/09/293382954_192792019752648_120047178045655581_n-267x400.jpg",
           number: 5,
-          description: "description",
+          description: "<div>a</div>",
         },
         KHOA_THAM_QUAN_BBQ: {
           service_name: "Picnic: Tham quan và ăn uống BBQ",
@@ -81,6 +88,8 @@ const configs = [
             high_children: 999000,
             high_children: 699000,
           },
+          content:
+            "QK tự do tham quan sở thú mini, học cách làm quen và cho thú ăn, tự do chụp hình check-in tại nông trại không giới hạn thời gian, miễn phí đồ uống.",
           thumbnail:
             "https://vietgangz.com/wp-content/uploads/2022/09/293382954_192792019752648_120047178045655581_n-267x400.jpg",
           number: 6,
@@ -94,10 +103,12 @@ const configs = [
             low_children: 699000,
             high_children: 699000,
           },
+          content:
+            "QK tự do tham quan sở thú mini, học cách làm quen và cho thú ăn, tự do chụp hình check-in tại nông trại không giới hạn thời gian, miễn phí đồ uống.",
           thumbnail:
             "https://vietgangz.com/wp-content/uploads/2022/09/293382954_192792019752648_120047178045655581_n-267x400.jpg",
           number: 7,
-          description: "description",
+          description: "<div>a</div>",
         },
         KHOA_LUU_TRU_TRONG_XE_NGUA: {
           service_name: "Lưu trú: Trải nghiệm qua đêm trong Cỗ xe ngựa 999.000 VND/người",
@@ -107,10 +118,12 @@ const configs = [
             low_children: 999000,
             high_children: 699000,
           },
+          content:
+            "QK tự do tham quan sở thú mini, học cách làm quen và cho thú ăn, tự do chụp hình check-in tại nông trại không giới hạn thời gian, miễn phí đồ uống.",
           thumbnail:
             "https://vietgangz.com/wp-content/uploads/2022/09/293382954_192792019752648_120047178045655581_n-267x400.jpg",
           number: 8,
-          description: "description",
+          description: "<div>a</div>",
         },
       },
       tenants: [
@@ -163,6 +176,43 @@ const configs = [
             "https://vietgangz.com/wp-content/uploads/2022/04/z3321486777130_c9d6d793343ab69095fec14a8c1955aa-300x400.jpg",
         },
       ],
+      food_sets:[
+        {
+          thumbnail:'https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg?auto=compress&cs=tinysrgb&w=1600',
+          name:'BBQ',
+          price:100000,
+          description:'',
+          number:1
+        },
+        {
+          thumbnail:'https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg?auto=compress&cs=tinysrgb&w=1600',
+          name:'BBQ',
+          price:100000,
+          description:'',
+          number:2
+        },
+        {
+          thumbnail:'https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg?auto=compress&cs=tinysrgb&w=1600',
+          name:'BBQ',
+          price:100000,
+          description:'',
+          number:3
+        },
+        {
+          thumbnail:'https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg?auto=compress&cs=tinysrgb&w=1600',
+          name:'BBQ',
+          price:100000,
+          description:'',
+          number:4
+        },
+        {
+          thumbnail:'https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg?auto=compress&cs=tinysrgb&w=1600',
+          name:'BBQ',
+          price:100000,
+          description:'',
+          number:5
+        },
+      ]
     },
   },
 ];
