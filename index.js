@@ -14,6 +14,8 @@ const orderRoute = require('./routes/order')
 const horseServiceRoute = require('./routes/horse_service')
 const horseRoute = require("./routes/horse")
 const configRoute = require("./routes/configs")
+const customerRoute = require("./routes/customers")
+const horsePlaceRoute = require("./routes/horse_place")
 
 const cors = require('cors')
 const logger = require('./utils/logger')
@@ -66,6 +68,8 @@ app.use('/api/order', orderRoute)
 app.use('/api/horse-service', horseServiceRoute)
 app.use('/api/horse-club', horseRoute)
 app.use('/api/configs', configRoute)
+app.use('/api/customers', customerRoute)
+app.use('/api/horse-place', horsePlaceRoute)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, (port) => {

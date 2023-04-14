@@ -8,6 +8,7 @@ const Product = require("./product");
 const Booking = require("./booking");
 const Order = require("./order");
 const HorseService = require("./horse_service");
+const HorsePlace = require("./horse_place");
 const HorseClubSet = require("./horse_club_set");
 const Config = require("./config");
 const mongoDb = require("./db");
@@ -27,4 +28,5 @@ module.exports = {
   HorseClubSet,
   mongoDb,
   Config,
+  HorsePlace
 };

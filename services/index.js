@@ -10,6 +10,8 @@ const horseService = require('./horse_service')
 const horseClubSetService = require('./horse_club_set')
 const baseService = require('./base')
 const authService = require('./auth.service')
+const customerService = require('./customer.service.js')
+const horsePlaceService = require('./horse_place.js')
 
 module.exports = {
   userService,
@@ -23,5 +25,7 @@ module.exports = {
   horseService,
   baseService,
   authService,
-  horseClubSetService
+  horseClubSetService,
+  customerService,
+  horsePlaceService
 }
